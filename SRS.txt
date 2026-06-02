@@ -1,0 +1,471 @@
+# SOFTWARE REQUIREMENTS SPECIFICATION (SRS)
+
+# Precision Plastic Injection Moulding Corporate Website
+
+## Frontend-Only Industrial Manufacturing Website
+
+1. Introduction
+
+## 1.1 Purpose
+
+The purpose of this project is to design and develop a modern, premium, responsive, and highly interactive corporate website for a precision plastic injection moulding manufacturing company with over 20 years of industry experience.
+
+The website will:
+
+* Establish a strong digital presence
+* Showcase manufacturing expertise and infrastructure
+* Present services and technical capabilities
+* Generate business inquiries and RFQs
+* Build trust among industrial clients and OEMs
+* Deliver a modern user experience through animations and interactive UI
+
+This project will be developed as a frontend-only website without a dedicated backend system.
+
+# 1.2 Scope
+
+The website will function as:
+
+* Corporate company profile
+* Industrial capability showcase
+* Lead generation platform
+* Manufacturing portfolio website
+
+The website will include:
+
+* Responsive modern UI
+* Interactive animations
+* AI chatbot integration
+* RFQ and inquiry forms
+* Product and infrastructure galleries
+* SEO optimization
+
+The website will not include:
+
+* Database management
+* User authentication
+* Admin dashboard
+* ERP integration
+* Inventory management
+
+Third-party services such as Formspree, EmailJS, or Web3Forms will handle form submissions.
+
+
+# 1.3 Intended Audience
+
+## Primary Audience
+
+* Automotive manufacturers
+* Electronics companies
+* Industrial procurement teams
+* OEM manufacturers
+* Product development firms
+* Medical component manufacturers
+
+## Secondary Audience
+
+* Startups requiring plastic components
+* Engineering consultants
+* Manufacturing partners
+
+2. Overall Description
+
+## 2.1 Product Perspective
+
+The website is intended to act as:
+
+* A premium industrial brand identity platform
+* A lead generation website
+* A technical capability presentation system
+* A digital company brochure
+
+The website should visually communicate:
+
+* Precision
+* Engineering excellence
+* Industrial reliability
+* Manufacturing quality
+
+# 2.2 Product Objectives
+
+The website shall:
+
+* Present the company professionally
+* Improve credibility and trust
+* Increase customer inquiries
+* Showcase infrastructure and capabilities
+* Provide smooth and engaging user experience
+* Maintain fast performance across devices
+
+3. Website Structure
+
+# Navbar Structure
+
+1. Home
+2. About
+3. Solutions
+4. Infrastructure
+5. Contact
+
+### CTA Button
+
+* Request Quote
+
+4. Functional Requirements
+
+# 4.1 Home Page
+
+The Home page shall include:
+
+## Hero Section
+
+* Fullscreen industrial banner/video
+* Company tagline
+* CTA buttons
+* Animated text transitions
+
+## Company Overview
+
+* Brief company introduction
+* 20+ years experience highlight
+
+## Statistics Section
+
+* Experience count
+* Industries served
+* Precision tolerance
+* Production capabilities
+
+## Why Choose Us
+
+* Quality assurance
+* Fast turnaround
+* Cost-effective production
+* End-to-end support
+
+## Industries Preview
+
+* Automotive
+* Electronics
+* Medical
+* Consumer Goods
+* Industrial
+
+## Certifications Preview
+
+* ISO certification display
+* Quality standards
+
+## CTA Section
+
+* Request quote
+* Contact buttons
+
+# 4.2 About Page
+
+The About page shall include:
+
+## Company Overview
+
+* Company introduction
+* Manufacturing expertise
+
+## Vision & Mission
+
+* Corporate mission
+* Quality commitment
+
+## Experience Timeline
+
+* Company journey
+* Milestones
+
+## Certifications
+
+* ISO 9001:2015
+* Quality standards
+
+## Manufacturing Philosophy
+
+* Precision-focused approach
+* Engineering practices
+
+# 4.3 Solutions Page
+
+The Solutions page shall include:
+
+## Services
+
+* Custom Injection Moulding
+* Mould Design & Manufacturing
+* Prototyping & Sampling
+* Insert Moulding
+* Overmoulding
+* Secondary Operations
+
+## Industries Served
+
+* Automotive
+* Electronics
+* Consumer Goods
+* Medical
+* Industrial
+
+## Materials Supported
+
+* ABS
+* PP
+* PC
+* Nylon
+* POM
+* HDPE
+* LDPE
+* TPE
+* Glass-filled grades
+* Flame-retardant grades
+
+## Technical Capabilities
+
+* Machine tonnage
+* Precision tolerances
+* Production volumes
+* Toolroom capabilities
+
+
+# 4.4 Infrastructure Page
+
+The Infrastructure page shall include:
+
+## Factory Overview
+
+* Manufacturing facility visuals
+
+## Machinery Showcase
+
+* Injection moulding machines
+* Production equipment
+
+## Toolroom
+
+* Mould manufacturing setup
+
+## Inspection & Quality
+
+* Inspection procedures
+* Quality assurance systems
+
+## Product Gallery
+
+* Manufactured components
+* Production visuals
+
+## Manufacturing Workflow
+
+* Process illustrations
+* Production stages
+
+
+# 4.5 Contact Page
+
+The Contact page shall include:
+
+## Inquiry Form
+
+* Name
+* Company
+* Email
+* Phone
+* Message
+
+## RFQ Form
+
+* Requirement details
+* File upload support
+
+## Contact Information
+
+* Address
+* Phone number
+* Email address
+
+## Google Maps Integration
+
+* Factory location map
+
+## WhatsApp Integration
+
+* Instant inquiry option
+
+## AI Chatbot
+
+* Customer assistance
+* FAQ handling
+* Lead guidance
+
+5. Non-Functional Requirements
+
+# 5.1 Performance Requirements
+
+The website shall:
+
+* Load within 3 seconds
+* Maintain smooth animations
+* Optimize media assets
+* Support lazy loading
+
+# 5.2 Responsiveness
+
+The website shall:
+
+* Support desktop devices
+* Support tablets
+* Support mobile phones
+* Maintain consistent UI across screen sizes
+
+
+# 5.3 Security Requirements
+
+The website shall:
+
+* Use HTTPS protocol
+* Protect forms against spam
+* Secure API integrations
+* Hide API keys securely
+
+
+# 5.4 SEO Requirements
+
+The website shall include:
+
+* SEO-friendly URLs
+* Meta tags
+* Structured data/schema markup
+* Sitemap.xml
+* Robots.txt
+* Optimized headings
+* Image optimization
+
+
+# 5.5 Accessibility Requirements
+
+The website shall:
+
+* Support keyboard navigation
+* Include image alt text
+* Maintain proper contrast ratios
+* Use semantic HTML
+
+
+6. User Interface Requirements
+
+# 6.1 Design Style
+
+The UI should:
+
+* Look industrial and premium
+* Use modern layouts
+* Maintain minimal navigation
+* Follow clean spacing systems
+
+# 6.2 Color Theme
+
+Primary colors:
+
+* Dark blue
+* Black
+* White
+* Metallic gray accents
+
+# 6.3 Typography
+
+Typography should:
+
+* Be modern and readable
+* Use bold industrial-style headings
+* Maintain clear content hierarchy
+
+# 6.4 Animation Requirements
+
+The website shall include:
+
+* Smooth page transitions
+* Scroll-based animations
+* Hover interactions
+* Animated counters
+* Reveal effects
+
+Animations shall:
+
+* Enhance user experience
+* Not reduce performance
+
+
+7. Technology Stack
+
+# Frontend Technologies
+
+* Next.js
+* React.js
+* Tailwind CSS
+* Framer Motion
+
+
+
+# Third-Party Integrations
+
+## Forms
+
+* Formspree
+  OR
+* EmailJS
+  OR
+* Web3Forms
+
+## AI Chatbot
+
+* OpenAI API
+  OR
+* Tidio AI
+  OR
+* Crisp Chat
+
+
+# Deployment
+
+* Vercel
+  OR
+* Netlify
+
+
+8. Future Enhancements
+
+Potential future upgrades:
+
+* Backend CMS
+* ERP integration
+* Customer dashboard
+* Production tracking
+* Multi-language support
+* Product catalog management
+* AI-powered RFQ automation
+
+
+9. Assumptions & Constraints
+
+## Assumptions
+
+* The company will provide branding assets and images
+* Product/manufacturing photos will be available
+* Forms will use external email services
+
+## Constraints
+
+* No backend/database system
+* No authentication system
+* Limited dynamic functionality
+
+
+10. Conclusion
+
+This project aims to create a premium industrial corporate website that reflects the company’s expertise in precision plastic injection moulding through a modern, fast, visually attractive, and interactive frontend experience.
+
+The website will serve as a strong digital identity platform that improves credibility, showcases manufacturing excellence, and generates business inquiries effectively while maintaining simplicity in architecture through a frontend-only implementation.
