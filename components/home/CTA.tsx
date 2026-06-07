@@ -5,9 +5,8 @@ import { motion } from "framer-motion";
 
 export default function CTA() {
   return (
-    <section className="bg-[#F8FAF8] py-28">
-      <div className="container-custom">
-        
+    <section className="bg-[#F8FAF8] pt-0 pb-0 m-0">
+      <div className="container-custom m-0">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -30,14 +29,17 @@ export default function CTA() {
             injection moulding solutions tailored to your needs.
           </p>
 
-          <button className="group mt-10 inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 font-semibold text-[#006B2D] transition hover:scale-105">
+          <a
+            href="/contact"
+            className="group mt-10 inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 font-semibold text-[#006B2D] transition hover:scale-105"
+          >
             Request a Quote
 
             <ArrowRight
               size={18}
               className="transition group-hover:translate-x-1"
             />
-          </button>
+          </a>
         </motion.div>
       </div>
     </section>

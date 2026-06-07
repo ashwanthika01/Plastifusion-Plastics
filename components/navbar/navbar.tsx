@@ -40,7 +40,7 @@ export default function Navbar() {
         <div className="mx-auto w-full max-w-7xl px-6 lg:px-8">
           <div className="flex h-20 items-center justify-between">
 
-            {/* LOGO + BRAND — properly grouped */}
+            {/* LOGO + BRAND — now visible on mobile too */}
             <Link href="/" className="flex items-center gap-3">
               <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-2xl">
                 <Image
@@ -50,7 +50,7 @@ export default function Navbar() {
                   className="object-cover"
                 />
               </div>
-              <div className="hidden sm:block">
+              <div>
                 <h2 className="text-lg font-bold tracking-wide text-gray-900 leading-tight">
                   PLASTIFUSION
                 </h2>
@@ -96,7 +96,7 @@ export default function Navbar() {
         </div>
       </header>
 
-      {/* MOBILE MENU */}
+      {/* ===================== MOBILE MENU ===================== */}
       <AnimatePresence>
         {mobileMenu && (
           <>
@@ -106,7 +106,7 @@ export default function Navbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setMobileMenu(false)}
-              className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm lg:hidden"
+              className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden"
             />
 
             {/* MENU PANEL */}
@@ -117,26 +117,33 @@ export default function Navbar() {
               transition={{ duration: 0.35, ease: "easeInOut" }}
               className="fixed right-0 top-0 z-50 flex h-screen w-[85%] max-w-sm flex-col bg-white p-8 shadow-2xl lg:hidden"
             >
-              {/* TOP */}
-              <div className="flex items-center justify-between">
-                <div>
-                  <h2 className="text-xl font-bold text-gray-900">
-                    Plastifusion
-                  </h2>
-                  <p className="text-xs tracking-[0.25em] text-gray-500">
-                    PLASTICS PVT. LTD
-                  </p>
+              {/* Menu Header */}
+              <div className="flex items-center justify-between mb-10">
+                <div className="flex items-center gap-3">
+                  <div className="relative h-9 w-9 overflow-hidden rounded-xl">
+                    <Image
+                      src="/logo.jpeg"
+                      alt="Plastifusion Logo"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-bold text-gray-900">Plastifusion</h2>
+                    <p className="text-xs tracking-widest text-gray-500">PLASTICS PVT. LTD</p>
+                  </div>
                 </div>
+
                 <button
                   onClick={() => setMobileMenu(false)}
                   className="flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200"
                 >
-                  <X size={18} />
+                  <X size={20} />
                 </button>
               </div>
 
-              {/* LINKS */}
-              <div className="mt-14 flex flex-col gap-8">
+              {/* Navigation Links */}
+              <div className="flex flex-col gap-8 mt-6">
                 {navLinks.map((link, index) => (
                   <motion.div
                     key={link.name}
@@ -147,7 +154,7 @@ export default function Navbar() {
                     <Link
                       href={link.href}
                       onClick={() => setMobileMenu(false)}
-                      className="text-2xl font-semibold text-gray-800 transition hover:text-[#006B2D]"
+                      className="text-3xl font-semibold text-gray-800 hover:text-[#006B2D] transition"
                     >
                       {link.name}
                     </Link>
@@ -155,14 +162,18 @@ export default function Navbar() {
                 ))}
               </div>
 
-              {/* BOTTOM CTA */}
-              <div className="mt-auto">
-                <button className="flex w-full items-center justify-center gap-2 rounded-full bg-[#006B2D] px-6 py-4 font-semibold text-white shadow-lg transition hover:bg-green-700">
+              {/* Bottom CTA */}
+              <div className="mt-auto pt-12">
+                <Link
+                  href="/contact"
+                  onClick={() => setMobileMenu(false)}
+                  className="flex w-full items-center justify-center gap-2 rounded-full bg-[#006B2D] py-4 font-semibold text-white shadow-lg hover:bg-green-700 transition"
+                >
                   Request Quote
-                  <ArrowRight size={18} />
-                </button>
+                  <ArrowRight size={20} />
+                </Link>
                 <p className="mt-6 text-center text-sm text-gray-500">
-                  Innovation in Every Mold
+                  Innovation in Every Mould
                 </p>
               </div>
             </motion.div>
