@@ -4,7 +4,6 @@ import Solutions from "@/components/home/Solutions";
 import WhyChooseUs from "@/components/home/WhyChooseUs";
 import Infrastructure from "@/components/home/Infrastructure";
 import CTA from "@/components/home/CTA";
-import Footer from "@/components/Footer/Footer";
 
 export default function HomePage() {
   return (
@@ -15,7 +14,6 @@ export default function HomePage() {
       <WhyChooseUs />
       <Infrastructure />
       <CTA />
-      <Footer />
     </main>
   );
 }
