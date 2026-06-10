@@ -1,69 +1,709 @@
+
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef, useState, useEffect } from "react";
+import { motion, useScroll, useTransform, useInView, AnimatePresence } from "framer-motion";
 
-const services = [
-  "Custom Injection Moulding",
-  "Mould Design & Manufacturing",
-  "Prototype & Sampling",
-  "Insert Moulding",
-  "Overmoulding",
-  "Assembly Operations",
-];
+// ─── TOKENS ──────────────────────────────────────────────────────────────────
+const G   = "#00903F";   // deeper green for light-bg contrast
+const GL  = "#00b050";   // lighter green for accents
+const BG  = "#F5F4F0";   // warm industrial off-white
+const BG2 = "#ECEAE4";   // card surface
+const BG3 = "#E2E0D8";   // darker surface
+const INK = "#0F0F0E";   // primary text
+const INK2= "#5A584F";   // secondary text
+const INK3= "#9A9890";   // muted text
+const WH  = "#FFFFFF";   // card white
 
-export default function SolutionsPage() {
+// ─── ANIMATION HELPERS ───────────────────────────────────────────────────────
+function CR({ children, delay = 0, className = "" }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-10% 0px" });
   return (
-    <main className="bg-white">
-      
-      {/* HERO */}
-      <section className="bg-[#F8FAF8] pt-40 pb-28">
-        <div className="container-custom">
-          
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="max-w-4xl"
-          >
-            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[#006B2D]">
-              Solutions
-            </p>
+    <div ref={ref} className={`overflow-hidden ${className}`}>
+      <motion.div
+        initial={{ y: "106%" }}
+        animate={inView ? { y: 0 } : {}}
+        transition={{ duration: 0.92, ease: [0.16, 1, 0.3, 1], delay }}
+      >{children}</motion.div>
+    </div>
+  );
+}
 
-            <h1 className="mt-6 text-5xl font-bold leading-tight text-gray-900 lg:text-7xl">
-              Complete Plastic
-              <span className="block text-[#006B2D]">
-                Manufacturing Solutions
-              </span>
-            </h1>
-          </motion.div>
+function FU({ children, delay = 0, className = "" }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-8% 0px" });
+  return (
+    <motion.div ref={ref}
+      initial={{ opacity: 0, y: 24 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.72, ease: [0.16, 1, 0.3, 1], delay }}
+      className={className}
+    >{children}</motion.div>
+  );
+}
+
+// Clip-path wipe from bottom-left
+function WipeIn({ children, delay = 0, className = "" }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-6% 0px" });
+  return (
+    <motion.div ref={ref}
+      initial={{ clipPath: "inset(100% 0% 0% 0%)" }}
+      animate={inView ? { clipPath: "inset(0% 0% 0% 0%)" } : {}}
+      transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1], delay }}
+      className={className}
+    >{children}</motion.div>
+  );
+}
+
+function Eyebrow({ label, dark = false }) {
+  return (
+    <div className="flex items-center gap-4 mb-7">
+      <div className="w-8 h-px" style={{ background: G }} />
+      <span className="text-[10px] tracking-[0.32em] uppercase font-bold" style={{ color: G }}>{label}</span>
+      <div className="w-8 h-px" style={{ background: dark ? "rgba(0,0,0,0.12)" : "rgba(0,0,0,0.1)" }} />
+    </div>
+  );
+}
+
+// ─── COUNT-UP HOOK ────────────────────────────────────────────────────────────
+function useCountUp(target, duration = 1.6, start = false) {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    if (!start) return;
+    let startTime = null;
+    const numeric = parseFloat(target.replace(/[^0-9.]/g, ""));
+    const step = (ts) => {
+      if (!startTime) startTime = ts;
+      const progress = Math.min((ts - startTime) / (duration * 1000), 1);
+      const ease = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.floor(ease * numeric));
+      if (progress < 1) requestAnimationFrame(step);
+      else setCount(numeric);
+    };
+    requestAnimationFrame(step);
+  }, [start, target, duration]);
+  return count;
+}
+
+// ─── HERO ─────────────────────────────────────────────────────────────────────
+function Hero() {
+  return (
+    <section className="relative flex flex-col overflow-hidden"
+      style={{ background: BG, height: "100dvh", minHeight: 600 }}>
+
+      {/* Scan line sweep — one-time diagonal reveal */}
+      <motion.div className="absolute inset-0 pointer-events-none z-20"
+        style={{ background: `linear-gradient(105deg, transparent 0%, rgba(0,144,63,0.055) 48%, transparent 52%)` }}
+        initial={{ x: "-120%" }}
+        animate={{ x: "220%" }}
+        transition={{ duration: 1.1, ease: [0.4, 0, 0.2, 1], delay: 0.3 }}
+      />
+
+      {/* Dot grid */}
+      <div className="absolute inset-0 pointer-events-none" style={{
+        backgroundImage: "radial-gradient(rgba(0,144,63,0.18) 1px, transparent 1px)",
+        backgroundSize: "40px 40px",
+        opacity: 0.55,
+      }} />
+
+      {/* Subtle corner mark */}
+      <svg className="absolute top-0 right-0 pointer-events-none" width="220" height="220" style={{ opacity: 0.06 }}>
+        <path d="M220 0 L220 220 L0 220" fill="none" stroke={G} strokeWidth="1"/>
+        <path d="M220 40 L220 220 L40 220" fill="none" stroke={G} strokeWidth="0.5"/>
+      </svg>
+
+      {/* nav clearance */}
+      <div style={{ height: 72, flexShrink: 0 }} />
+
+      <div className="flex-1 min-h-0 flex flex-col justify-between px-8 md:px-16 lg:px-24 py-10">
+        <div>
+          <FU delay={0.06}><Eyebrow label="Our Solutions" /></FU>
+          <div style={{ marginTop: 8 }}>
+            <CR delay={0.12}>
+              <h1 className="font-black uppercase tracking-[-0.04em]"
+                style={{ fontSize: "clamp(2.8rem,6.5vw,7.5rem)", lineHeight: 0.84, color: INK }}>
+                Precision
+              </h1>
+            </CR>
+            <CR delay={0.20}>
+              <h1 className="font-black uppercase tracking-[-0.04em]"
+                style={{ fontSize: "clamp(2.8rem,6.5vw,7.5rem)", lineHeight: 0.84,
+                  WebkitTextStroke: `2.5px ${G}`, color: "transparent" }}>
+                Plastic
+              </h1>
+            </CR>
+            <CR delay={0.28}>
+              <h1 className="font-black uppercase tracking-[-0.04em]"
+                style={{ fontSize: "clamp(2.8rem,6.5vw,7.5rem)", lineHeight: 0.84, color: G }}>
+                Components.
+              </h1>
+            </CR>
+          </div>
         </div>
-      </section>
 
-      {/* SERVICES */}
-      <section className="py-28">
-        <div className="container-custom">
-          
-          <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
-            {services.map((service, index) => (
-              <motion.div
-                key={index}
-                whileHover={{ y: -8 }}
-                className="rounded-[30px] border border-green-100 bg-[#F8FAF8] p-10"
-              >
-                <div className="h-16 w-16 rounded-2xl bg-[#006B2D]" />
+        <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-12">
+          <FU delay={0.45}>
+            <p className="text-base leading-relaxed font-light max-w-[46ch]" style={{ color: INK2 }}>
+              Through advanced injection moulding technology. From concept to mass
+              production — durable, precise, and cost-effective parts for five industries.
+            </p>
+          </FU>
 
-                <h3 className="mt-8 text-2xl font-bold text-gray-900">
-                  {service}
-                </h3>
-
-                <p className="mt-5 leading-relaxed text-gray-600">
-                  Precision-engineered manufacturing services
-                  tailored for industrial applications.
-                </p>
+          {/* 3 key stats */}
+          <div className="flex gap-0 shrink-0">
+            {[["20+", "Years Exp."], ["3", "Machines"], ["±0.05", "mm Tolerance"]].map(([n, l], i) => (
+              <motion.div key={i}
+                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.55 + i * 0.1, duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+                className="flex flex-col px-8 py-5"
+                style={{
+                  borderLeft: `1px solid rgba(0,144,63,0.25)`,
+                  borderRight: i === 2 ? `1px solid rgba(0,144,63,0.25)` : "none",
+                }}>
+                <span className="font-black tracking-tight" style={{ fontSize: 36, lineHeight: 1, color: G }}>{n}</span>
+                <span className="text-[10px] tracking-[0.2em] uppercase font-semibold mt-1" style={{ color: INK3 }}>{l}</span>
               </motion.div>
             ))}
           </div>
         </div>
-      </section>
+      </div>
+    </section>
+  );
+}
+
+// ─── CAP BAND (alternating slide-in) ─────────────────────────────────────────
+function CapBand() {
+  const items = [
+    { val: "120T–160T", label: "Clamping Force" },
+    { val: "±0.05mm",   label: "Critical Tolerance" },
+    { val: "2–4 wks",   label: "New Mould Lead Time" },
+    { val: "24–48 hr",  label: "Repeat Order Turnaround" },
+    { val: "100%",      label: "Part Inspection" },
+    { val: "1→∞",       label: "Prototype to Mass Prod." },
+    { val: "370 cm³",   label: "Max Shot Volume (160T)" },
+    { val: "341 g",     label: "Max Shot Weight" },
+  ];
+  return (
+    <section style={{ background: BG3, borderTop: `1px solid rgba(0,0,0,0.07)`, borderBottom: `1px solid rgba(0,0,0,0.07)` }}>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-px" style={{ background: "rgba(0,0,0,0.06)" }}>
+        {items.map((c, i) => {
+          const fromLeft = i % 2 === 0;
+          const ref = useRef(null);
+          const inView = useInView(ref, { once: true, margin: "-4% 0px" });
+          return (
+            <motion.div key={i} ref={ref}
+              initial={{ opacity: 0, x: fromLeft ? -40 : 40 }}
+              animate={inView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1], delay: i * 0.04 }}
+              className="flex flex-col gap-1.5 p-8"
+              style={{ background: BG2 }}>
+              <span className="font-black tracking-tight" style={{ fontSize: 28, color: G }}>{c.val}</span>
+              <span style={{ fontSize: 10, letterSpacing: "0.18em", textTransform: "uppercase", color: INK3, fontWeight: 600 }}>{c.label}</span>
+            </motion.div>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+// ─── SERVICES ─────────────────────────────────────────────────────────────────
+const SERVICES = [
+  {
+    n: "01", title: "Custom Injection Moulding",
+    desc: "End-to-end production of plastic parts with full support to optimise cost and quality. From material selection through moulding to final QC — all under one roof.",
+    tags: ["ABS", "PP", "PC", "Nylon", "POM", "HDPE", "TPE", "Glass-filled"],
+    detail: "Our 3-machine floor runs Yizumi UN160SKIII (160T) and two UN120SKIII (120T) horizontally, covering shot weights from 227g up to 341g and screw diameters of 43–48mm.",
+  },
+  {
+    n: "02", title: "Mould Design & Manufacturing",
+    desc: "In-house toolroom builds single-cavity, multi-cavity, and family moulds in hardened steel — designed for millions of production cycles with minimal maintenance.",
+    tags: ["Hot Runner", "Cold Runner", "Single Cavity", "Multi Cavity", "Family Mould"],
+    detail: "We engineer both hot runner and cold runner systems. Mould thickness range: 145–460mm. Platen sizes up to 685×665mm. 5 ejector pin holes standard.",
+  },
+  {
+    n: "03", title: "Prototyping & Sampling",
+    desc: "Rapid samples for design validation. Short-run production to reduce lead time and de-risk your product launch before committing to full tooling.",
+    tags: ["T1 Samples", "Design Validation", "Short Run", "DFM Review"],
+    detail: "Our DFM-first approach means we catch costly design errors before steel is cut. Typical sample delivery in 2–4 weeks from design sign-off.",
+  },
+  {
+    n: "04", title: "Secondary Operations",
+    desc: "Insert moulding, overmoulding, and assembly all under one roof. Reduces your supply chain touchpoints and delivers faster, cleaner turnaround.",
+    tags: ["Insert Moulding", "Overmoulding", "Assembly", "Ultrasonic Welding"],
+    detail: "Consolidating secondary ops with moulding eliminates inter-supplier logistics, reduces handling damage, and cuts total lead time by up to 40%.",
+  },
+];
+
+function ServiceCard({ s, i }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-6% 0px" });
+  const [open, setOpen] = useState(false);
+
+  return (
+    <motion.div ref={ref}
+      initial={{ opacity: 0, clipPath: "inset(100% 0% 0% 0%)" }}
+      animate={inView ? { opacity: 1, clipPath: "inset(0% 0% 0% 0%)" } : {}}
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: i * 0.1 }}
+      className="group relative flex flex-col overflow-hidden cursor-pointer"
+      style={{ background: WH, border: "1px solid rgba(0,0,0,0.08)" }}
+      onClick={() => setOpen(o => !o)}
+    >
+      {/* left accent bar animates in */}
+      <motion.div className="absolute top-0 left-0 bottom-0 w-[3px]"
+        style={{ background: G, transformOrigin: "top", scaleY: 0 }}
+        animate={inView ? { scaleY: 1 } : {}}
+        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.4 + i * 0.1 }}
+      />
+
+      <div className="p-8 pl-10 flex-1">
+        <div className="flex items-start justify-between mb-6">
+          <span className="text-[11px] font-black tracking-[0.2em]" style={{ color: INK3 }}>{s.n}</span>
+          <motion.div animate={{ rotate: open ? 45 : 0 }} transition={{ duration: 0.28 }}
+            className="w-7 h-7 flex items-center justify-center border"
+            style={{ borderColor: "rgba(0,144,63,0.3)", color: G }}>
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+              <path d="M5 1V9M1 5H9" stroke="currentColor" strokeWidth="1.5" />
+            </svg>
+          </motion.div>
+        </div>
+
+        <h3 className="font-black leading-tight tracking-tight mb-4" style={{ fontSize: "clamp(1.3rem,2.2vw,1.8rem)", color: INK }}>{s.title}</h3>
+        <p className="text-sm leading-relaxed mb-6" style={{ color: INK2 }}>{s.desc}</p>
+
+        <div className="flex flex-wrap gap-2">
+          {s.tags.map(t => (
+            <span key={t} className="px-2.5 py-1 text-[9px] font-bold tracking-[0.15em] uppercase border"
+              style={{ borderColor: "rgba(0,144,63,0.2)", color: G, background: "rgba(0,144,63,0.05)" }}>{t}</span>
+          ))}
+        </div>
+
+        <AnimatePresence initial={false}>
+          {open && (
+            <motion.div key="detail"
+              initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
+              style={{ overflow: "hidden" }}>
+              <div className="mt-6 pt-6 border-t" style={{ borderColor: "rgba(0,0,0,0.07)" }}>
+                <p className="text-sm leading-relaxed" style={{ color: INK2 }}>{s.detail}</p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      <div className="px-8 pl-10 py-4 border-t flex items-center justify-between"
+        style={{ borderColor: "rgba(0,0,0,0.07)", background: BG2 }}>
+        <span style={{ fontSize: 10, letterSpacing: "0.18em", textTransform: "uppercase", fontWeight: 600, color: INK3 }}>
+          Plastifusion
+        </span>
+        <span className="text-[10px] font-bold tracking-[0.12em] uppercase" style={{ color: G }}>
+          {open ? "Close ↑" : "Learn more ↓"}
+        </span>
+      </div>
+    </motion.div>
+  );
+}
+
+function Services() {
+  return (
+    <section style={{ background: BG }} className="py-28 px-8 md:px-16 lg:px-24">
+      <div className="max-w-7xl mx-auto">
+        <FU><Eyebrow label="Our Services" /></FU>
+        <div className="flex flex-col lg:flex-row items-start justify-between gap-10 mb-16">
+          <div>
+            <CR>
+              <h2 className="font-black uppercase tracking-tight leading-[0.87]"
+                style={{ fontSize: "clamp(2.4rem,5vw,5.5rem)", color: INK }}>Four services.</h2>
+            </CR>
+            <CR delay={0.09}>
+              <h2 className="font-black uppercase tracking-tight leading-[0.87]"
+                style={{ fontSize: "clamp(2.4rem,5vw,5.5rem)", WebkitTextStroke: `2px ${G}`, color: "transparent" }}>
+                One roof.
+              </h2>
+            </CR>
+          </div>
+          <FU delay={0.18} className="max-w-sm">
+            <p className="text-sm leading-relaxed" style={{ color: INK2 }}>
+              Tap any card to expand technical details. Every service is delivered
+              from our Coimbatore facility with ISO 9001:2015 quality controls at every stage.
+            </p>
+          </FU>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {SERVICES.map((s, i) => <ServiceCard key={i} s={s} i={i} />)}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── MACHINES ─────────────────────────────────────────────────────────────────
+function Machines() {
+  const machines = [
+    {
+      model: "UN160SKIII", brand: "YIZUMI", force: "160T / 1600kN", qty: 1,
+      shotVol: "370.9 cm³", shotWt: "341.3 g", screwD: "48 mm",
+      injPress: "162.9 MPa", injRate: "169 g/s", clampStroke: "410 mm",
+      platen: "685 × 665 mm", tiebar: "460 × 440 mm", moldThk: "160–460 mm",
+      motor: "25.2 kW", dryTime: "2.1 s",
+    },
+    {
+      model: "UN120SKIII", brand: "YIZUMI", force: "120T / 1200kN", qty: 2,
+      shotVol: "246.9 cm³", shotWt: "227.1 g", screwD: "43 mm",
+      injPress: "170.4 MPa", injRate: "135.5 g/s", clampStroke: "360 mm",
+      platen: "610 × 570 mm", tiebar: "415 × 375 mm", moldThk: "145–400 mm",
+      motor: "21.4 kW", dryTime: "1.9 s",
+    },
+  ];
+
+  return (
+    <section style={{ background: BG2 }} className="py-28 px-8 md:px-16 lg:px-24">
+      <div className="max-w-7xl mx-auto">
+        <FU><Eyebrow label="Machine Fleet" /></FU>
+        <div className="flex flex-col lg:flex-row items-start justify-between gap-10 mb-16">
+          <CR>
+            <h2 className="font-black uppercase tracking-tight leading-[0.87]"
+              style={{ fontSize: "clamp(2.4rem,5vw,5.5rem)", color: INK }}>
+              3 Yizumi<br /><span style={{ color: G }}>machines.</span>
+            </h2>
+          </CR>
+          <FU delay={0.15} className="max-w-sm">
+            <p className="text-sm leading-relaxed" style={{ color: INK2 }}>
+              One UN160SKIII at 160 tonnes and two UN120SKIII at 120 tonnes — horizontal
+              injection moulding machines with servo-hydraulic drive for energy efficiency.
+            </p>
+          </FU>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {machines.map((m, i) => (
+            <FU key={i} delay={i * 0.12}>
+              <div className="relative overflow-hidden" style={{ background: WH, border: "1px solid rgba(0,0,0,0.08)" }}>
+                {/* header */}
+                <div className="flex items-center justify-between px-8 py-6 border-b" style={{ borderColor: "rgba(0,0,0,0.07)", background: BG3 }}>
+                  <div>
+                    <p className="text-[10px] tracking-[0.28em] uppercase font-bold mb-1" style={{ color: G }}>{m.brand}</p>
+                    <h3 className="text-2xl font-black tracking-tight" style={{ color: INK }}>{m.model}</h3>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-3xl font-black tracking-tight" style={{ color: G }}>{m.force.split("/")[0].trim()}</div>
+                    <div className="text-[10px] tracking-[0.15em] uppercase font-semibold" style={{ color: INK3 }}>
+                      Qty: {m.qty}
+                    </div>
+                  </div>
+                </div>
+                {/* specs grid */}
+                <div className="grid grid-cols-2 gap-px p-px" style={{ background: "rgba(0,0,0,0.06)" }}>
+                  {[
+                    ["Shot Volume",   m.shotVol],
+                    ["Shot Weight",   m.shotWt],
+                    ["Screw Dia.",    m.screwD],
+                    ["Inj. Pressure", m.injPress],
+                    ["Inj. Rate",     m.injRate],
+                    ["Clamp Stroke",  m.clampStroke],
+                    ["Platen (W×H)",  m.platen],
+                    ["Tie Bar",       m.tiebar],
+                    ["Mould Thick.",  m.moldThk],
+                    ["Motor Power",   m.motor],
+                    ["Dry Cycle",     m.dryTime],
+                  ].map(([label, val]) => (
+                    <div key={label} className="flex flex-col gap-1 px-5 py-4" style={{ background: WH }}>
+                      <span style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: INK3, fontWeight: 600 }}>{label}</span>
+                      <span className="font-bold text-sm" style={{ color: INK }}>{val}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </FU>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── MATERIALS ────────────────────────────────────────────────────────────────
+const MATS = [
+  { code: "ABS",   name: "Acrylonitrile Butadiene Styrene", density: "0.99 g/cm³", use: "Enclosures, housings, consumer products" },
+  { code: "PP",    name: "Polypropylene",                    density: "0.80 g/cm³", use: "Automotive clips, containers, medical" },
+  { code: "PC",    name: "Polycarbonate",                    density: "1.05 g/cm³", use: "Optical, electrical, safety-critical" },
+  { code: "NYLON", name: "Polyamide 6/66",                   density: "0.98 g/cm³", use: "Gears, bearings, structural connectors" },
+  { code: "POM",   name: "Polyoxymethylene (Delrin)",         density: "1.08 g/cm³", use: "Precision gears, rollers, bushings" },
+  { code: "HDPE",  name: "High Density Polyethylene",         density: "0.80 g/cm³", use: "Industrial, chemical-resistant parts" },
+  { code: "LDPE",  name: "Low Density Polyethylene",          density: "0.80 g/cm³", use: "Flexible packaging, seals" },
+  { code: "TPE",   name: "Thermoplastic Elastomer",           density: "—",          use: "Soft-touch grips, seals, overmoulds" },
+  { code: "GF",    name: "Glass-Filled Grades",               density: "varies",     use: "High-strength structural, dimensionally stable" },
+  { code: "FR",    name: "Flame-Retardant Grades",            density: "varies",     use: "Electrical, UL94 compliant components" },
+];
+
+function Materials() {
+  return (
+    <section style={{ background: BG }} className="py-28 px-8 md:px-16 lg:px-24">
+      <div className="max-w-7xl mx-auto">
+        <FU><Eyebrow label="Material Expertise" /></FU>
+        <div className="flex flex-col lg:flex-row items-start justify-between gap-10 mb-14">
+          <CR>
+            <h2 className="font-black uppercase tracking-tight leading-[0.87]"
+              style={{ fontSize: "clamp(2.4rem,5vw,5.5rem)", color: INK }}>
+              10 materials.<br /><span style={{ color: G }}>Endless parts.</span>
+            </h2>
+          </CR>
+          <FU delay={0.15} className="max-w-sm">
+            <p className="text-sm leading-relaxed" style={{ color: INK2 }}>
+              We process commodity and engineering-grade thermoplastics including glass-filled and flame-retardant compounds.
+              Material selection guidance is included with every DFM review.
+            </p>
+          </FU>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-px" style={{ background: "rgba(0,0,0,0.07)" }}>
+          {MATS.map((m, i) => (
+            <FU key={i} delay={i * 0.04}>
+              <motion.div className="flex items-start gap-5 p-6" style={{ background: WH }}
+                whileHover={{ background: BG2 }} transition={{ duration: 0.18 }}>
+                <div className="shrink-0 w-14 h-14 flex items-center justify-center font-black text-xs tracking-wider"
+                  style={{ background: "rgba(0,144,63,0.07)", border: `1px solid rgba(0,144,63,0.2)`, color: G }}>
+                  {m.code}
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-bold mb-0.5" style={{ color: INK }}>{m.name}</p>
+                  <p className="text-xs mb-1.5" style={{ color: INK3 }}>ρ {m.density}</p>
+                  <p className="text-xs leading-relaxed" style={{ color: INK2 }}>{m.use}</p>
+                </div>
+              </motion.div>
+            </FU>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── INDUSTRIES ───────────────────────────────────────────────────────────────
+const INDUSTRIES = [
+  { name: "Automotive",    icon: "🚗", parts: "Clips · Connectors · Dashboard Trims · Housings · Brackets" },
+  { name: "Electronics",   icon: "⚡", parts: "Enclosures · Switches · Cable Glands · Connector Housings" },
+  { name: "Consumer Goods",icon: "🏠", parts: "Kitchenware · Containers · Appliance Parts · Toys" },
+  { name: "Medical",       icon: "⚕",  parts: "Non-implantable Components · Casings · Disposables" },
+  { name: "Industrial",    icon: "⚙",  parts: "Gears · Rollers · Custom Fixtures · Structural Parts" },
+];
+
+function Industries() {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const x1 = useTransform(scrollYProgress, [0, 1], ["-4%", "4%"]);
+
+  return (
+    <section ref={ref} style={{ background: BG3 }} className="py-28 px-8 md:px-16 lg:px-24 overflow-hidden">
+      <div className="max-w-7xl mx-auto">
+        <FU><Eyebrow label="Industries We Serve" /></FU>
+
+        {/* parallax bg text */}
+        <div className="relative overflow-hidden mb-12" style={{ height: 72 }}>
+          <motion.div style={{ x: x1 }} className="absolute whitespace-nowrap select-none pointer-events-none" >
+            <span className="font-black uppercase tracking-tight"
+              style={{ fontSize: 72, color: INK, opacity: 0.04 }}>
+              AUTOMOTIVE · ELECTRONICS · CONSUMER · MEDICAL · INDUSTRIAL ·&nbsp;
+            </span>
+          </motion.div>
+        </div>
+
+        <CR>
+          <h2 className="font-black uppercase tracking-tight leading-[0.87] mb-12"
+            style={{ fontSize: "clamp(2.4rem,5vw,5.5rem)", color: INK }}>
+            Five sectors.<br />
+            <span style={{ WebkitTextStroke: `2px ${G}`, color: "transparent" }}>Countless parts.</span>
+          </h2>
+        </CR>
+
+        {/* Line-draw animation on each row */}
+        <div className="border-t" style={{ borderColor: "rgba(0,0,0,0.1)" }}>
+          {INDUSTRIES.map((ind, i) => {
+            const iRef = useRef(null);
+            const iInView = useInView(iRef, { once: true });
+            return (
+              <div key={i} ref={iRef} className="relative">
+                {/* animated underline draw */}
+                <motion.div className="absolute bottom-0 left-0 h-px"
+                  style={{ background: `rgba(0,144,63,0.2)` }}
+                  initial={{ width: "0%" }}
+                  animate={iInView ? { width: "100%" } : {}}
+                  transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: i * 0.1 }}
+                />
+                <motion.div
+                  initial={{ opacity: 0, x: -24 }} animate={iInView ? { opacity: 1, x: 0 } : {}}
+                  transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1], delay: i * 0.08 }}
+                  className="group flex items-center gap-6 py-6">
+                  <div className="w-12 h-12 flex items-center justify-center shrink-0 text-xl"
+                    style={{ background: "rgba(0,144,63,0.07)", border: `1px solid rgba(0,144,63,0.18)` }}>
+                    {ind.icon}
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-black text-lg tracking-tight mb-0.5" style={{ color: INK }}>{ind.name}</p>
+                    <p className="text-xs" style={{ color: INK2 }}>{ind.parts}</p>
+                  </div>
+                  <motion.div className="opacity-0 group-hover:opacity-100" transition={{ duration: 0.15 }}>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path d="M2 14L14 2M14 2H6M14 2V10" stroke={G} strokeWidth="1.5" />
+                    </svg>
+                  </motion.div>
+                </motion.div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── QUALITY ──────────────────────────────────────────────────────────────────
+function Quality() {
+  const counterRef = useRef(null);
+  const counterInView = useInView(counterRef, { once: true });
+  const count = useCountUp("20", 1.8, counterInView);
+
+  const pts = [
+    { h: "ISO 9001:2015 Certified",  b: "Full quality management system with 100% part inspection at final stage. Every batch shipped with dimensional report." },
+    { h: "DFM-First Engineering",    b: "Every project begins with a Design for Manufacturability review. We catch costly errors before a single tonne of pressure is applied." },
+    { h: "Fast Turnaround",          b: "2–4 weeks for new moulds. 24–48 hours for repeat orders. Our lean floor scheduling keeps commitments, not excuses." },
+    { h: "Cost-Effective Pricing",   b: "DFM-driven design reduces material waste. Competitive tooling and per-part pricing from prototype through mass production." },
+    { h: "End-to-End Support",       b: "Material selection → mould design → moulding → secondary ops → QC → delivery. One supplier, full accountability." },
+  ];
+
+  return (
+    <section style={{ background: BG2 }} className="py-28 px-8 md:px-16 lg:px-24">
+      <div className="max-w-7xl mx-auto">
+        <FU><Eyebrow label="Why Plastifusion" /></FU>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+          <div>
+            <CR>
+              <h2 className="font-black uppercase tracking-tight leading-[0.87]"
+                style={{ fontSize: "clamp(2.4rem,5vw,5.5rem)", color: INK }}>Quality</h2>
+            </CR>
+            <CR delay={0.08}>
+              <h2 className="font-black uppercase tracking-tight leading-[0.87]"
+                style={{ fontSize: "clamp(2.4rem,5vw,5.5rem)", color: G }}>first.</h2>
+            </CR>
+            <FU delay={0.2}>
+              <p className="mt-8 text-base leading-relaxed max-w-md" style={{ color: INK2 }}>
+                ISO 9001:2015 isn't a frame on the wall. It's the process every operator follows on every shift — from material receipt to final delivery.
+              </p>
+            </FU>
+            <FU delay={0.32}>
+              <div ref={counterRef} className="mt-10 flex items-center gap-5 p-5 border-l-2"
+                style={{ borderColor: G, background: WH }}>
+                <div>
+                  <div className="font-black tracking-tight" style={{ fontSize: 48, color: G, lineHeight: 1 }}>
+                    {count}+
+                  </div>
+                  <div className="text-[10px] tracking-[0.2em] uppercase font-bold mt-1" style={{ color: INK3 }}>
+                    Years of injection moulding experience
+                  </div>
+                </div>
+              </div>
+            </FU>
+          </div>
+          <div className="space-y-4">
+            {pts.map((p, i) => (
+              <FU key={i} delay={i * 0.09}>
+                <motion.div className="p-5 border-l-2 transition-colors duration-200"
+                  style={{ borderColor: G, background: WH, borderRadius: "0 4px 4px 0" }}
+                  whileHover={{ paddingLeft: 28, background: BG }}
+                  transition={{ duration: 0.2 }}>
+                  <p className="text-sm font-bold mb-1.5" style={{ color: INK }}>{p.h}</p>
+                  <p className="text-sm leading-relaxed" style={{ color: INK2 }}>{p.b}</p>
+                </motion.div>
+              </FU>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── CTA ──────────────────────────────────────────────────────────────────────
+function CTA() {
+  return (
+    <section className="relative py-40 px-8 md:px-16 lg:px-24 overflow-hidden"
+      style={{ background: INK }}>
+      {/* Green glow */}
+      <motion.div className="absolute pointer-events-none" style={{
+        width: 700, height: 700, borderRadius: "50%",
+        background: "radial-gradient(circle,rgba(0,176,80,0.12) 0%,transparent 65%)",
+        left: "50%", top: "-30%", x: "-50%"
+      }}
+        animate={{ scale: [1, 1.12, 1] }} transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }} />
+
+      {/* Dot grid over dark */}
+      <div className="absolute inset-0 pointer-events-none" style={{
+        backgroundImage: "radial-gradient(rgba(0,176,80,0.12) 1px, transparent 1px)",
+        backgroundSize: "40px 40px",
+        opacity: 0.4,
+      }} />
+
+      <div className="relative z-10 max-w-7xl mx-auto text-center">
+        <FU><Eyebrow label="Get Started" dark /></FU>
+        <CR>
+          <h2 className="font-black uppercase tracking-tight"
+            style={{ fontSize: "clamp(3rem,8vw,8rem)", lineHeight: 0.84, color: "#fff" }}>Let's build</h2>
+        </CR>
+        <CR delay={0.08}>
+          <h2 className="font-black uppercase tracking-tight"
+            style={{ fontSize: "clamp(3rem,8vw,8rem)", lineHeight: 0.84, color: G }}>it right.</h2>
+        </CR>
+        <FU delay={0.3}>
+          <p className="mt-8 text-base leading-relaxed max-w-lg mx-auto" style={{ color: "rgba(255,255,255,0.5)" }}>
+            Tell us about your component, tolerances, and volumes.
+            Our engineers will respond with a DFM assessment within 24 hours.
+          </p>
+        </FU>
+        <FU delay={0.45} className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a href="/contact"
+            className="inline-flex items-center gap-4 px-10 py-4 text-sm font-bold tracking-[0.18em] uppercase transition-all duration-300"
+            style={{ background: G, color: "#fff" }}
+            onMouseEnter={e => e.currentTarget.style.background = "#007533"}
+            onMouseLeave={e => e.currentTarget.style.background = G}>
+            Request a Quote
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M1 11L11 1M11 1H4M11 1V8" stroke="currentColor" strokeWidth="1.5" />
+            </svg>
+          </a>
+          <a href="tel:+919994771121"
+            className="inline-flex items-center gap-4 px-10 py-4 text-sm font-bold tracking-[0.18em] uppercase transition-all duration-300"
+            style={{ background: "transparent", color: "rgba(255,255,255,0.5)", border: "1.5px solid rgba(255,255,255,0.15)" }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.5)"; e.currentTarget.style.color = "#fff"; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.15)"; e.currentTarget.style.color = "rgba(255,255,255,0.5)"; }}>
+            Call Us
+          </a>
+        </FU>
+        <FU delay={0.6}>
+          <p className="mt-8 text-xs" style={{ color: "rgba(255,255,255,0.25)", letterSpacing: "0.1em" }}>
+            S.F.No.639/1, Site No.60,61 · Comsia Industrial Estate · Vellamadai Village · Coimbatore – 641110
+          </p>
+        </FU>
+      </div>
+    </section>
+  );
+}
+
+// ─── PAGE ─────────────────────────────────────────────────────────────────────
+export default function SolutionsPage() {
+  return (
+    <main style={{ background: BG }}>
+      <Hero />
+      <CapBand />
+      <Services />
+      <Machines />
+      <Materials />
+      <Industries />
+      <Quality />
+      <CTA />
     </main>
   );
 }
+
