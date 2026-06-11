@@ -55,7 +55,8 @@ const CARDS = [
   },
 ];
 
-const fadeUp = {
+// Using `any` here to satisfy framer-motion's Variants typing for custom easing arrays
+const fadeUp: any = {
   hidden: { opacity: 0, y: 30 },
   show: (i: number) => ({
     opacity: 1,

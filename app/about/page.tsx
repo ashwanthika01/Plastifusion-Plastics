@@ -3,6 +3,7 @@
 import { useRef, useState, type ReactNode } from "react";
 import { motion, useScroll, useTransform, useInView, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { Hero } from "./Hero";
 
 // ─── TOKENS ───────────────────────────────────────────────────────────────────
 const G = "#00b050";
@@ -36,7 +37,7 @@ function CR({ children, delay = 0, className = "" }: RevealProps) {
 }
 
 // ─── FADE UP ──────────────────────────────────────────────────────────────────
-function FU({ children, delay = 0, className = "" }) {
+function FU({ children, delay = 0, className = "" }: RevealProps) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-8% 0px" });
   return (
@@ -53,7 +54,7 @@ function FU({ children, delay = 0, className = "" }) {
 }
 
 // ─── EYEBROW ──────────────────────────────────────────────────────────────────
-function Eyebrow({ label, onDark = false }) {
+function Eyebrow({ label, onDark = false }: { label: string; onDark?: boolean }) {
   return (
     <div className="flex items-center gap-4 mb-8">
       <div className="w-10 h-px" style={{ background: G }} />
@@ -202,145 +203,6 @@ function ScanLine() {
       animate={{ top: ["5%", "95%", "5%"] }}
       transition={{ duration: 5, ease: "linear", repeat: Infinity }}
     />
-  );
-}
-
-// ─── HERO (WITH FIXED BACKGROUND IMAGE) ─────────────────────────────────────
-export function Hero() {
-  return (
-    <section
-      className="relative overflow-hidden"
-      style={{
-        background: "#ffffff",
-        minHeight: "100dvh",
-        display: "flex",
-        flexDirection: "column",
-        position: "relative"
-      }}
-    >
-      {/* Fixed Background Image with low opacity */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
-        style={{
-          backgroundImage: "url('https://images.unsplash.com/photo-1581092160607-4c7c9c0f5d3e?q=80&w=2070')", // Industrial factory / moulding theme
-          backgroundAttachment: "fixed",
-          opacity: 0.18,
-        }}
-      />
-
-      {/* Subtle overlay to ensure readability */}
-      <div
-        className="absolute inset-0 bg-white z-[1]"
-        style={{ opacity: 0.85 }}
-      />
-
-      {/* Subtle accent texture */}
-      <div
-        className="absolute inset-0 pointer-events-none z-[2] opacity-40"
-        style={{
-          backgroundImage: `radial-gradient(circle at 30% 20%, rgba(0,176,80,0.12) 0%, transparent 50%),
-                           radial-gradient(circle at 70% 80%, rgba(0,176,80,0.08) 0%, transparent 50%)`
-        }}
-      />
-
-      <div className="flex-1 flex items-center px-6 md:px-10 lg:px-14 max-w-[1440px] w-full mx-auto relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center w-full">
-          
-          {/* LEFT - CREATIVE ABOUT US */}
-          <div className="lg:col-span-6 flex flex-col justify-center">
-            <FU delay={0.05}>
-              <div className="flex items-center gap-3 mb-6">
-                <motion.div
-                  className="w-2 h-2 rounded-full"
-                  style={{ background: G }}
-                  animate={{ scale: [1, 1.8, 1], opacity: [1, 0.5, 1] }}
-                  transition={{ duration: 2.2, repeat: Infinity }}
-                />
-                <span className="text-[11px] tracking-[0.4em] uppercase font-bold" style={{ color: G }}>
-                  WELCOME TO PLASTIFUSION PLASTICS
-                </span>
-              </div>
-            </FU>
-
-            <div className="mb-10">
-              <CR delay={0.1}>
-                <h1
-                  className="font-black uppercase tracking-[-0.04em] leading-none"
-                  style={{
-                    fontSize: "clamp(5.5rem, 12vw, 10.5rem)",
-                    color: D,
-                  }}
-                >
-                  ABOUT
-                </h1>
-              </CR>
-              <CR delay={0.25}>
-                <h1
-                  className="font-black uppercase tracking-[-0.04em] leading-none -mt-4"
-                  style={{
-                    fontSize: "clamp(5.5rem, 12vw, 10.5rem)",
-                    WebkitTextStroke: `3px ${G}`,
-                    color: "transparent",
-                  }}
-                >
-                  US
-                </h1>
-              </CR>
-            </div>
-
-            <FU delay={0.45}>
-              <p className="max-w-md text-[1.1rem] leading-relaxed font-light" style={{ color: "rgba(0,0,0,0.65)" }}>
-                We engineer precision plastic injection moulding in Coimbatore with obsessive attention to every micron.
-              </p>
-            </FU>
-
-            <FU delay={0.65} className="mt-12 flex flex-col sm:flex-row gap-4">
-              <a
-                href="/contact"
-                className="inline-flex items-center justify-center gap-3 px-10 py-4 text-sm font-bold tracking-[0.2em] uppercase transition-all hover:scale-105"
-                style={{ background: G, color: "#fff" }}
-                onMouseEnter={e => { e.currentTarget.style.background = GD; }}
-                onMouseLeave={e => { e.currentTarget.style.background = G; }}
-              >
-                REQUEST QUOTE
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path d="M1 13L13 1M13 1H5M13 1V9" stroke="currentColor" strokeWidth="1.6" />
-                </svg>
-              </a>
-            </FU>
-          </div>
-
-          {/* RIGHT - 3D ANIMATION */}
-          <div className="lg:col-span-6 flex justify-center lg:justify-end">
-            <motion.div
-              className="relative w-full max-w-[460px] aspect-square"
-              initial={{ opacity: 0, scale: 0.8, rotate: -6 }}
-              animate={{ opacity: 1, scale: 1, rotate: 0 }}
-              transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-white via-white to-transparent rounded-[4rem] z-10" />
-              
-              <div className="relative z-20 w-full h-full rounded-[3.8rem] overflow-hidden border-[12px] border-white shadow-2xl">
-                <ScanLine />
-                <MouldCrossSection />
-              </div>
-
-              {/* Decorative floating element */}
-              <motion.div
-                className="absolute -top-8 -right-6 bg-white/90 backdrop-blur-sm px-5 py-3 rounded-2xl shadow-lg text-center border border-white"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1 }}
-              >
-                <div className="text-xs uppercase tracking-widest font-semibold" style={{ color: GD }}>Est. 2026</div>
-              </motion.div>
-            </motion.div>
-          </div>
-        </div>
-      </div>
-
-     
-    </section>
   );
 }
 
@@ -600,7 +462,7 @@ const INDUSTRIES = [
   { name: "Industrial", parts: "Gears · Rollers · Custom Fixtures", icon: "I" },
 ];
 
-function IndustryRow({ name, parts, icon, i }) {
+function IndustryRow({ name, parts, icon, i }: { name: string; parts: string; icon: string; i: number }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true });
   return (

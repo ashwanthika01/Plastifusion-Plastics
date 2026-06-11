@@ -1,22 +1,19 @@
-
 "use client";
 
 import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform, useInView, AnimatePresence } from "framer-motion";
 
-// ─── TOKENS ──────────────────────────────────────────────────────────────────
-const G   = "#00903F";   // deeper green for light-bg contrast
-const GL  = "#00b050";   // lighter green for accents
-const BG  = "#F5F4F0";   // warm industrial off-white
-const BG2 = "#ECEAE4";   // card surface
-const BG3 = "#E2E0D8";   // darker surface
-const INK = "#0F0F0E";   // primary text
-const INK2= "#5A584F";   // secondary text
-const INK3= "#9A9890";   // muted text
-const WH  = "#FFFFFF";   // card white
+const G   = "#00903F";
+const GL  = "#00b050";
+const BG  = "#F5F4F0";
+const BG2 = "#ECEAE4";
+const BG3 = "#E2E0D8";
+const INK = "#0F0F0E";
+const INK2= "#5A584F";
+const INK3= "#9A9890";
+const WH  = "#FFFFFF";
 
-// ─── ANIMATION HELPERS ───────────────────────────────────────────────────────
-function CR({ children, delay = 0, className = "" }) {
+function CR({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-10% 0px" });
   return (
@@ -30,7 +27,7 @@ function CR({ children, delay = 0, className = "" }) {
   );
 }
 
-function FU({ children, delay = 0, className = "" }) {
+function FU({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-8% 0px" });
   return (
@@ -43,8 +40,7 @@ function FU({ children, delay = 0, className = "" }) {
   );
 }
 
-// Clip-path wipe from bottom-left
-function WipeIn({ children, delay = 0, className = "" }) {
+function WipeIn({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-6% 0px" });
   return (
@@ -57,7 +53,7 @@ function WipeIn({ children, delay = 0, className = "" }) {
   );
 }
 
-function Eyebrow({ label, dark = false }) {
+function Eyebrow({ label, dark = false }: { label: string; dark?: boolean }) {
   return (
     <div className="flex items-center gap-4 mb-7">
       <div className="w-8 h-px" style={{ background: G }} />
@@ -67,14 +63,13 @@ function Eyebrow({ label, dark = false }) {
   );
 }
 
-// ─── COUNT-UP HOOK ────────────────────────────────────────────────────────────
-function useCountUp(target, duration = 1.6, start = false) {
+function useCountUp(target: string, duration: number = 1.6, start: boolean = false): number {
   const [count, setCount] = useState(0);
   useEffect(() => {
     if (!start) return;
-    let startTime = null;
+    let startTime: number | null = null;
     const numeric = parseFloat(target.replace(/[^0-9.]/g, ""));
-    const step = (ts) => {
+    const step = (ts: number) => {
       if (!startTime) startTime = ts;
       const progress = Math.min((ts - startTime) / (duration * 1000), 1);
       const ease = 1 - Math.pow(1 - progress, 3);
@@ -92,31 +87,22 @@ function Hero() {
   return (
     <section className="relative flex flex-col overflow-hidden"
       style={{ background: BG, height: "100dvh", minHeight: 600 }}>
-
-      {/* Scan line sweep — one-time diagonal reveal */}
       <motion.div className="absolute inset-0 pointer-events-none z-20"
         style={{ background: `linear-gradient(105deg, transparent 0%, rgba(0,144,63,0.055) 48%, transparent 52%)` }}
         initial={{ x: "-120%" }}
         animate={{ x: "220%" }}
         transition={{ duration: 1.1, ease: [0.4, 0, 0.2, 1], delay: 0.3 }}
       />
-
-      {/* Dot grid */}
       <div className="absolute inset-0 pointer-events-none" style={{
         backgroundImage: "radial-gradient(rgba(0,144,63,0.18) 1px, transparent 1px)",
         backgroundSize: "40px 40px",
         opacity: 0.55,
       }} />
-
-      {/* Subtle corner mark */}
       <svg className="absolute top-0 right-0 pointer-events-none" width="220" height="220" style={{ opacity: 0.06 }}>
         <path d="M220 0 L220 220 L0 220" fill="none" stroke={G} strokeWidth="1"/>
         <path d="M220 40 L220 220 L40 220" fill="none" stroke={G} strokeWidth="0.5"/>
       </svg>
-
-      {/* nav clearance */}
       <div style={{ height: 72, flexShrink: 0 }} />
-
       <div className="flex-1 min-h-0 flex flex-col justify-between px-8 md:px-16 lg:px-24 py-10">
         <div>
           <FU delay={0.06}><Eyebrow label="Our Solutions" /></FU>
@@ -142,7 +128,6 @@ function Hero() {
             </CR>
           </div>
         </div>
-
         <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-12">
           <FU delay={0.45}>
             <p className="text-base leading-relaxed font-light max-w-[46ch]" style={{ color: INK2 }}>
@@ -150,8 +135,6 @@ function Hero() {
               production — durable, precise, and cost-effective parts for five industries.
             </p>
           </FU>
-
-          {/* 3 key stats */}
           <div className="flex gap-0 shrink-0">
             {[["20+", "Years Exp."], ["3", "Machines"], ["±0.05", "mm Tolerance"]].map(([n, l], i) => (
               <motion.div key={i}
@@ -173,7 +156,25 @@ function Hero() {
   );
 }
 
-// ─── CAP BAND (alternating slide-in) ─────────────────────────────────────────
+// ─── CAP BAND ─────────────────────────────────────────────────────────────────
+// ✅ Extracted into its own component so hooks are not called inside .map()
+function CapBandItem({ c, i }: { c: { val: string; label: string }; i: number }) {
+  const fromLeft = i % 2 === 0;
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-4% 0px" });
+  return (
+    <motion.div ref={ref}
+      initial={{ opacity: 0, x: fromLeft ? -40 : 40 }}
+      animate={inView ? { opacity: 1, x: 0 } : {}}
+      transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1], delay: i * 0.04 }}
+      className="flex flex-col gap-1.5 p-8"
+      style={{ background: BG2 }}>
+      <span className="font-black tracking-tight" style={{ fontSize: 28, color: G }}>{c.val}</span>
+      <span style={{ fontSize: 10, letterSpacing: "0.18em", textTransform: "uppercase", color: INK3, fontWeight: 600 }}>{c.label}</span>
+    </motion.div>
+  );
+}
+
 function CapBand() {
   const items = [
     { val: "120T–160T", label: "Clamping Force" },
@@ -188,22 +189,7 @@ function CapBand() {
   return (
     <section style={{ background: BG3, borderTop: `1px solid rgba(0,0,0,0.07)`, borderBottom: `1px solid rgba(0,0,0,0.07)` }}>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-px" style={{ background: "rgba(0,0,0,0.06)" }}>
-        {items.map((c, i) => {
-          const fromLeft = i % 2 === 0;
-          const ref = useRef(null);
-          const inView = useInView(ref, { once: true, margin: "-4% 0px" });
-          return (
-            <motion.div key={i} ref={ref}
-              initial={{ opacity: 0, x: fromLeft ? -40 : 40 }}
-              animate={inView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1], delay: i * 0.04 }}
-              className="flex flex-col gap-1.5 p-8"
-              style={{ background: BG2 }}>
-              <span className="font-black tracking-tight" style={{ fontSize: 28, color: G }}>{c.val}</span>
-              <span style={{ fontSize: 10, letterSpacing: "0.18em", textTransform: "uppercase", color: INK3, fontWeight: 600 }}>{c.label}</span>
-            </motion.div>
-          );
-        })}
+        {items.map((c, i) => <CapBandItem key={i} c={c} i={i} />)}
       </div>
     </section>
   );
@@ -237,7 +223,7 @@ const SERVICES = [
   },
 ];
 
-function ServiceCard({ s, i }) {
+function ServiceCard({ s, i }: { s: (typeof SERVICES)[0]; i: number }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-6% 0px" });
   const [open, setOpen] = useState(false);
@@ -251,13 +237,11 @@ function ServiceCard({ s, i }) {
       style={{ background: WH, border: "1px solid rgba(0,0,0,0.08)" }}
       onClick={() => setOpen(o => !o)}
     >
-      {/* left accent bar animates in */}
       <motion.div className="absolute top-0 left-0 bottom-0 w-[3px]"
         style={{ background: G, transformOrigin: "top", scaleY: 0 }}
         animate={inView ? { scaleY: 1 } : {}}
         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.4 + i * 0.1 }}
       />
-
       <div className="p-8 pl-10 flex-1">
         <div className="flex items-start justify-between mb-6">
           <span className="text-[11px] font-black tracking-[0.2em]" style={{ color: INK3 }}>{s.n}</span>
@@ -269,17 +253,14 @@ function ServiceCard({ s, i }) {
             </svg>
           </motion.div>
         </div>
-
         <h3 className="font-black leading-tight tracking-tight mb-4" style={{ fontSize: "clamp(1.3rem,2.2vw,1.8rem)", color: INK }}>{s.title}</h3>
         <p className="text-sm leading-relaxed mb-6" style={{ color: INK2 }}>{s.desc}</p>
-
         <div className="flex flex-wrap gap-2">
-          {s.tags.map(t => (
+          {s.tags.map((t: string) => (
             <span key={t} className="px-2.5 py-1 text-[9px] font-bold tracking-[0.15em] uppercase border"
               style={{ borderColor: "rgba(0,144,63,0.2)", color: G, background: "rgba(0,144,63,0.05)" }}>{t}</span>
           ))}
         </div>
-
         <AnimatePresence initial={false}>
           {open && (
             <motion.div key="detail"
@@ -293,7 +274,6 @@ function ServiceCard({ s, i }) {
           )}
         </AnimatePresence>
       </div>
-
       <div className="px-8 pl-10 py-4 border-t flex items-center justify-between"
         style={{ borderColor: "rgba(0,0,0,0.07)", background: BG2 }}>
         <span style={{ fontSize: 10, letterSpacing: "0.18em", textTransform: "uppercase", fontWeight: 600, color: INK3 }}>
@@ -377,12 +357,10 @@ function Machines() {
             </p>
           </FU>
         </div>
-
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {machines.map((m, i) => (
             <FU key={i} delay={i * 0.12}>
               <div className="relative overflow-hidden" style={{ background: WH, border: "1px solid rgba(0,0,0,0.08)" }}>
-                {/* header */}
                 <div className="flex items-center justify-between px-8 py-6 border-b" style={{ borderColor: "rgba(0,0,0,0.07)", background: BG3 }}>
                   <div>
                     <p className="text-[10px] tracking-[0.28em] uppercase font-bold mb-1" style={{ color: G }}>{m.brand}</p>
@@ -395,7 +373,6 @@ function Machines() {
                     </div>
                   </div>
                 </div>
-                {/* specs grid */}
                 <div className="grid grid-cols-2 gap-px p-px" style={{ background: "rgba(0,0,0,0.06)" }}>
                   {[
                     ["Shot Volume",   m.shotVol],
@@ -458,7 +435,6 @@ function Materials() {
             </p>
           </FU>
         </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-px" style={{ background: "rgba(0,0,0,0.07)" }}>
           {MATS.map((m, i) => (
             <FU key={i} delay={i * 0.04}>
@@ -491,6 +467,40 @@ const INDUSTRIES = [
   { name: "Industrial",    icon: "⚙",  parts: "Gears · Rollers · Custom Fixtures · Structural Parts" },
 ];
 
+// ✅ Extracted into its own component so hooks are not called inside .map()
+function IndustryRow({ ind, i }: { ind: (typeof INDUSTRIES)[0]; i: number }) {
+  const iRef = useRef(null);
+  const iInView = useInView(iRef, { once: true });
+  return (
+    <div ref={iRef} className="relative">
+      <motion.div className="absolute bottom-0 left-0 h-px"
+        style={{ background: `rgba(0,144,63,0.2)` }}
+        initial={{ width: "0%" }}
+        animate={iInView ? { width: "100%" } : {}}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: i * 0.1 }}
+      />
+      <motion.div
+        initial={{ opacity: 0, x: -24 }} animate={iInView ? { opacity: 1, x: 0 } : {}}
+        transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1], delay: i * 0.08 }}
+        className="group flex items-center gap-6 py-6">
+        <div className="w-12 h-12 flex items-center justify-center shrink-0 text-xl"
+          style={{ background: "rgba(0,144,63,0.07)", border: `1px solid rgba(0,144,63,0.18)` }}>
+          {ind.icon}
+        </div>
+        <div className="flex-1">
+          <p className="font-black text-lg tracking-tight mb-0.5" style={{ color: INK }}>{ind.name}</p>
+          <p className="text-xs" style={{ color: INK2 }}>{ind.parts}</p>
+        </div>
+        <motion.div className="opacity-0 group-hover:opacity-100" transition={{ duration: 0.15 }}>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M2 14L14 2M14 2H6M14 2V10" stroke={G} strokeWidth="1.5" />
+          </svg>
+        </motion.div>
+      </motion.div>
+    </div>
+  );
+}
+
 function Industries() {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
@@ -500,17 +510,14 @@ function Industries() {
     <section ref={ref} style={{ background: BG3 }} className="py-28 px-8 md:px-16 lg:px-24 overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <FU><Eyebrow label="Industries We Serve" /></FU>
-
-        {/* parallax bg text */}
         <div className="relative overflow-hidden mb-12" style={{ height: 72 }}>
-          <motion.div style={{ x: x1 }} className="absolute whitespace-nowrap select-none pointer-events-none" >
+          <motion.div style={{ x: x1 }} className="absolute whitespace-nowrap select-none pointer-events-none">
             <span className="font-black uppercase tracking-tight"
               style={{ fontSize: 72, color: INK, opacity: 0.04 }}>
               AUTOMOTIVE · ELECTRONICS · CONSUMER · MEDICAL · INDUSTRIAL ·&nbsp;
             </span>
           </motion.div>
         </div>
-
         <CR>
           <h2 className="font-black uppercase tracking-tight leading-[0.87] mb-12"
             style={{ fontSize: "clamp(2.4rem,5vw,5.5rem)", color: INK }}>
@@ -518,42 +525,8 @@ function Industries() {
             <span style={{ WebkitTextStroke: `2px ${G}`, color: "transparent" }}>Countless parts.</span>
           </h2>
         </CR>
-
-        {/* Line-draw animation on each row */}
         <div className="border-t" style={{ borderColor: "rgba(0,0,0,0.1)" }}>
-          {INDUSTRIES.map((ind, i) => {
-            const iRef = useRef(null);
-            const iInView = useInView(iRef, { once: true });
-            return (
-              <div key={i} ref={iRef} className="relative">
-                {/* animated underline draw */}
-                <motion.div className="absolute bottom-0 left-0 h-px"
-                  style={{ background: `rgba(0,144,63,0.2)` }}
-                  initial={{ width: "0%" }}
-                  animate={iInView ? { width: "100%" } : {}}
-                  transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: i * 0.1 }}
-                />
-                <motion.div
-                  initial={{ opacity: 0, x: -24 }} animate={iInView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1], delay: i * 0.08 }}
-                  className="group flex items-center gap-6 py-6">
-                  <div className="w-12 h-12 flex items-center justify-center shrink-0 text-xl"
-                    style={{ background: "rgba(0,144,63,0.07)", border: `1px solid rgba(0,144,63,0.18)` }}>
-                    {ind.icon}
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-black text-lg tracking-tight mb-0.5" style={{ color: INK }}>{ind.name}</p>
-                    <p className="text-xs" style={{ color: INK2 }}>{ind.parts}</p>
-                  </div>
-                  <motion.div className="opacity-0 group-hover:opacity-100" transition={{ duration: 0.15 }}>
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                      <path d="M2 14L14 2M14 2H6M14 2V10" stroke={G} strokeWidth="1.5" />
-                    </svg>
-                  </motion.div>
-                </motion.div>
-              </div>
-            );
-          })}
+          {INDUSTRIES.map((ind, i) => <IndustryRow key={i} ind={ind} i={i} />)}
         </div>
       </div>
     </section>
@@ -631,21 +604,17 @@ function CTA() {
   return (
     <section className="relative py-40 px-8 md:px-16 lg:px-24 overflow-hidden"
       style={{ background: INK }}>
-      {/* Green glow */}
       <motion.div className="absolute pointer-events-none" style={{
         width: 700, height: 700, borderRadius: "50%",
         background: "radial-gradient(circle,rgba(0,176,80,0.12) 0%,transparent 65%)",
         left: "50%", top: "-30%", x: "-50%"
       }}
         animate={{ scale: [1, 1.12, 1] }} transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }} />
-
-      {/* Dot grid over dark */}
       <div className="absolute inset-0 pointer-events-none" style={{
         backgroundImage: "radial-gradient(rgba(0,176,80,0.12) 1px, transparent 1px)",
         backgroundSize: "40px 40px",
         opacity: 0.4,
       }} />
-
       <div className="relative z-10 max-w-7xl mx-auto text-center">
         <FU><Eyebrow label="Get Started" dark /></FU>
         <CR>
@@ -666,8 +635,8 @@ function CTA() {
           <a href="/contact"
             className="inline-flex items-center gap-4 px-10 py-4 text-sm font-bold tracking-[0.18em] uppercase transition-all duration-300"
             style={{ background: G, color: "#fff" }}
-            onMouseEnter={e => e.currentTarget.style.background = "#007533"}
-            onMouseLeave={e => e.currentTarget.style.background = G}>
+            onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.background = "#007533"}
+            onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.background = G}>
             Request a Quote
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
               <path d="M1 11L11 1M11 1H4M11 1V8" stroke="currentColor" strokeWidth="1.5" />
@@ -676,8 +645,8 @@ function CTA() {
           <a href="tel:+919994771121"
             className="inline-flex items-center gap-4 px-10 py-4 text-sm font-bold tracking-[0.18em] uppercase transition-all duration-300"
             style={{ background: "transparent", color: "rgba(255,255,255,0.5)", border: "1.5px solid rgba(255,255,255,0.15)" }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.5)"; e.currentTarget.style.color = "#fff"; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.15)"; e.currentTarget.style.color = "rgba(255,255,255,0.5)"; }}>
+            onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(255,255,255,0.5)"; (e.currentTarget as HTMLAnchorElement).style.color = "#fff"; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(255,255,255,0.15)"; (e.currentTarget as HTMLAnchorElement).style.color = "rgba(255,255,255,0.5)"; }}>
             Call Us
           </a>
         </FU>
@@ -706,4 +675,3 @@ export default function SolutionsPage() {
     </main>
   );
 }
-

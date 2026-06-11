@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import type { Variants } from "framer-motion";
+
 
 /* ─────────────────────────────────────────────────────────
    FONTS  — already included in your layout/globals
@@ -109,20 +111,24 @@ const badges = [
 
 /* ─── Reusable animation variants ──────────────────────── */
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 28 },
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 24 },
   visible: (delay = 0) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, delay, ease: [0.23, 1, 0.32, 1] },
+    transition: { duration: 0.72, delay, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
   }),
 };
 
-const clipReveal = {
+const clipReveal: Variants = {
   hidden: { y: "100%" },
   visible: (delay = 0) => ({
     y: "0%",
-    transition: { duration: 0.9, delay, ease: [0.16, 1, 0.3, 1] },
+    transition: {
+      duration: 0.9,
+      delay,
+      ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+    },
   }),
 };
 
