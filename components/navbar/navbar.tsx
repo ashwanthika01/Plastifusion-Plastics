@@ -76,13 +76,16 @@ export default function Navbar() {
 
             {/* CTA BUTTON */}
             <div className="hidden lg:block">
-              <button className="group flex items-center gap-2 rounded-full bg-[#006B2D] px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-green-700">
+              <Link
+                href="/contact"
+                className="group inline-flex items-center gap-2 rounded-full bg-[#006B2D] px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-green-700"
+              >
                 Request Quote
                 <ArrowRight
                   size={16}
                   className="transition group-hover:translate-x-1"
                 />
-              </button>
+              </Link>
             </div>
 
             {/* MOBILE BUTTON */}
