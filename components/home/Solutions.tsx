@@ -185,10 +185,6 @@ export default function SolutionsIndustries() {
                   industrial-grade performance and durability.
                 </p>
 
-                {/* Hover arrow */}
-                <span className="mt-6 block text-xs font-semibold uppercase tracking-widest text-[#006B2D] opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                  Learn more →
-                </span>
               </motion.div>
             ))}
           </div>
