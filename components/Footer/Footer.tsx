@@ -436,7 +436,7 @@ export default function Footer() {
             <p>
               © 2026 Plastifusion Plastics Pvt. Ltd. All rights reserved. ·{" "}
               <span className="text-[#006B2D] hover:text-[#00b050] transition-colors cursor-pointer font-semibold">
-                Designed by Agnexis Technologies
+                Designed by Ashwanthika Govindaraja
               </span>
             </p>
             <div className="flex items-center gap-5">

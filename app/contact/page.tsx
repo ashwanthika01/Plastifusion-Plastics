@@ -13,7 +13,7 @@ import {
   Phone, Mail, MapPin, Globe, ArrowRight, CheckCircle2,
   AlertCircle, Send, ChevronRight, Zap, Clock, Shield,
 } from "lucide-react";
-// ─── Design tokens ────────────────────────────────────────────────────────────
+
 const C = {
   pageBg: "#F4F8F5",
   white: "#FFFFFF",
@@ -30,7 +30,7 @@ const C = {
   rule: "rgba(6,13,10,0.08)",
   ruleGreen: "rgba(0,176,80,0.14)",
 };
-// ─── Font loader ──────────────────────────────────────────────────────────────
+
 function FontLoader() {
   useEffect(() => {
     if (document.getElementById("pf-fonts")) return;
@@ -43,7 +43,7 @@ function FontLoader() {
   }, []);
   return null;
 }
-// ─── Fade-up wrapper ──────────────────────────────────────────────────────────
+
 function FadeUp({
   children, delay = 0, className = "", style = {},
 }: { children: React.ReactNode; delay?: number; className?: string; style?: React.CSSProperties }) {
@@ -62,7 +62,7 @@ function FadeUp({
     </motion.div>
   );
 }
-// ─── Eyebrow ──────────────────────────────────────────────────────────────────
+
 function Eyebrow({ label }: { label: string }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true });
@@ -84,18 +84,18 @@ function Eyebrow({ label }: { label: string }) {
     </div>
   );
 }
-// ─── Split headline with mask reveal ─────────────────────────────────────────
+
 function SplitHeading({ lines, accent }: { lines: string[]; accent: string }) {
   return (
     <h1
       style={{
         fontFamily: "'Syne', sans-serif",
-        fontSize: "clamp(44px, 6.5vw, 88px)",
+        fontSize: "clamp(36px, 6.5vw, 88px)",
         fontWeight: 800,
         lineHeight: 0.9,
         letterSpacing: "-0.035em",
         color: C.ink,
-        marginBottom: "2.5rem",
+        marginBottom: "2rem",
       }}
     >
       {lines.map((line, li) => (
@@ -120,7 +120,7 @@ function SplitHeading({ lines, accent }: { lines: string[]; accent: string }) {
     </h1>
   );
 }
-// ─── Typewriter text ──────────────────────────────────────────────────────────
+
 function Typewriter({ text }: { text: string }) {
   const [displayed, setDisplayed] = useState("");
   const [done, setDone] = useState(false);
@@ -151,7 +151,7 @@ function Typewriter({ text }: { text: string }) {
     </span>
   );
 }
-// ─── Count-up number ──────────────────────────────────────────────────────────
+
 function CountUp({ to, suffix = "" }: { to: number; suffix?: string }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true });
@@ -169,7 +169,7 @@ function CountUp({ to, suffix = "" }: { to: number; suffix?: string }) {
   }, [inView, to]);
   return <span ref={ref}>{val}{suffix}</span>;
 }
-// ─── Precision crosshair SVG ──────────────────────────────────────────────────
+
 function Crosshair({ size = 56, opacity = 0.35 }: { size?: number; opacity?: number }) {
   return (
     <motion.svg
@@ -192,7 +192,7 @@ function Crosshair({ size = 56, opacity = 0.35 }: { size?: number; opacity?: num
     </motion.svg>
   );
 }
-// ─── Animated floating particles ─────────────────────────────────────────────
+
 function Particles() {
   const pts = useRef([
     { id: 0, x: 63.464678874777626, y: 88.86645988719599, r: 3.4736203799341463, dur: 8.5, delay: 1.2 },
@@ -220,7 +220,7 @@ function Particles() {
     </div>
   );
 }
-// ─── Morphing blob (mouse-reactive) ──────────────────────────────────────────
+
 function MorphBlob({ mouseX, mouseY }: { mouseX: number; mouseY: number }) {
   const dx = (mouseX - 0.5) * 30;
   const dy = (mouseY - 0.5) * 30;
@@ -254,7 +254,7 @@ function MorphBlob({ mouseX, mouseY }: { mouseX: number; mouseY: number }) {
     </motion.div>
   );
 }
-// ─── Scrolling marquee ticker ─────────────────────────────────────────────────
+
 function MarqueeTicker() {
   const items = [
     "ISO Precision ±0.01mm",
@@ -266,18 +266,40 @@ function MarqueeTicker() {
     "PP · ABS · HDPE · Nylon",
     "Coimbatore · Tamil Nadu",
   ];
-  const doubled = [...items, ...items];
+
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [offset, setOffset] = useState(1500); // fallback
+
+  useEffect(() => {
+    if (!trackRef.current) return;
+
+    const measure = () => {
+      // The track contains items × 2; half its scrollWidth = one full loop
+      const fullWidth = trackRef.current!.scrollWidth;
+      setOffset(fullWidth / 2);
+    };
+
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+
+  // Speed in px/s — stays consistent on all screen sizes
+  const PX_PER_SEC = 60;
+  const duration = offset / PX_PER_SEC;
+
   return (
     <div
       className="relative overflow-hidden border-y py-3"
       style={{ background: C.greenXLight, borderColor: C.ruleGreen }}
     >
       <motion.div
+        ref={trackRef}
         className="flex gap-8 whitespace-nowrap"
-        animate={{ x: ["0%", "-50%"] }}
-        transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
+        animate={{ x: [0, -offset] }}
+        transition={{ duration, repeat: Infinity, ease: "linear" }}
       >
-        {doubled.map((item, i) => (
+        {[...items, ...items].map((item, i) => (
           <span
             key={i}
             className="flex items-center gap-3 shrink-0"
@@ -289,10 +311,7 @@ function MarqueeTicker() {
               letterSpacing: "0.14em",
             }}
           >
-            <span
-              className="w-1 h-1 rounded-full shrink-0"
-              style={{ background: C.green }}
-            />
+            <span className="w-1 h-1 rounded-full shrink-0" style={{ background: C.green }} />
             {item}
           </span>
         ))}
@@ -300,7 +319,7 @@ function MarqueeTicker() {
     </div>
   );
 }
-// ─── Diagonal section divider ─────────────────────────────────────────────────
+
 function DiagonalCut({ from, to }: { from: string; to: string }) {
   return (
     <div className="relative h-12 overflow-hidden" style={{ background: to }}>
@@ -314,7 +333,7 @@ function DiagonalCut({ from, to }: { from: string; to: string }) {
     </div>
   );
 }
-// ─── Magnetic tilt card ───────────────────────────────────────────────────────
+
 function TiltCard({
   children, className = "", style = {},
 }: { children: React.ReactNode; className?: string; style?: React.CSSProperties }) {
@@ -336,19 +355,14 @@ function TiltCard({
       ref={ref}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
-      style={{
-        rotateX: sRotX,
-        rotateY: sRotY,
-        transformStyle: "preserve-3d",
-        ...style,
-      }}
+      style={{ rotateX: sRotX, rotateY: sRotY, transformStyle: "preserve-3d", ...style }}
       className={className}
     >
       {children}
     </motion.div>
   );
 }
-// ─── Stats strip ─────────────────────────────────────────────────────────────
+
 function StatsStrip() {
   const stats = [
     { icon: Clock, value: 24, suffix: "hr", label: "Quote turnaround" },
@@ -356,10 +370,7 @@ function StatsStrip() {
     { icon: Shield, value: 15, suffix: "yr", label: "Industry experience" },
   ];
   return (
-    <div
-      className="grid grid-cols-1 sm:grid-cols-3 gap-px"
-      style={{ background: C.ruleGreen }}
-    >
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-px" style={{ background: C.ruleGreen }}>
       {stats.map((s, i) => (
         <FadeUp key={i} delay={i * 0.1}>
           <div
@@ -395,6 +406,7 @@ function StatsStrip() {
     </div>
   );
 }
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // ROOT
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -416,10 +428,12 @@ export default function ContactPage() {
     </div>
   );
 }
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // 1 · HERO
 // ═══════════════════════════════════════════════════════════════════════════════
 type FormStatus = "idle" | "sending" | "success" | "error";
+
 function HeroContact() {
   const [form, setForm] = useState({
     name: "", email: "", company: "", subject: "", message: "",
@@ -428,13 +442,16 @@ function HeroContact() {
   const [focused, setFocused] = useState<string | null>(null);
   const [mouse, setMouse] = useState({ x: 0.5, y: 0.5 });
   const sectionRef = useRef<HTMLElement>(null);
+
   const onMouseMove = useCallback((e: React.MouseEvent) => {
     const r = sectionRef.current!.getBoundingClientRect();
     setMouse({ x: (e.clientX - r.left) / r.width, y: (e.clientY - r.top) / r.height });
   }, []);
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => setForm({ ...form, [e.target.name]: e.target.value });
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("sending");
@@ -450,6 +467,7 @@ function HeroContact() {
       } else setStatus("error");
     } catch { setStatus("error"); }
   };
+
   const inputStyle = (name: string): React.CSSProperties => ({
     background: focused === name ? "#fff" : "rgba(6,13,10,0.03)",
     border: `1.5px solid ${focused === name ? C.green : C.rule}`,
@@ -463,6 +481,7 @@ function HeroContact() {
     transition: "border-color 0.18s, background 0.18s, box-shadow 0.18s",
     boxShadow: focused === name ? `0 0 0 4px rgba(0,176,80,0.09)` : "none",
   });
+
   return (
     <section
       ref={sectionRef}
@@ -471,18 +490,19 @@ function HeroContact() {
       style={{ background: C.pageBg, color: C.ink }}
     >
       <Particles />
-      {/* Mouse-reactive blob */}
+
+      {/* Mouse-reactive blob — desktop only */}
       <div className="hidden lg:block">
         <MorphBlob mouseX={mouse.x} mouseY={mouse.y} />
       </div>
-      {/* Crosshair decorations */}
+
+      {/* Crosshair decorations — desktop only */}
       <div className="pointer-events-none absolute top-6 left-8 hidden lg:block">
         <Crosshair size={44} opacity={0.3} />
       </div>
       <div className="pointer-events-none absolute bottom-16 right-12 hidden lg:block">
         <Crosshair size={32} opacity={0.2} />
       </div>
-      {/* Corner brackets */}
       <div className="pointer-events-none absolute top-4 right-4 hidden lg:block">
         <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
           <path d="M32 0 L32 12 M32 0 L20 0" stroke={C.green} strokeWidth="1" opacity="0.25" />
@@ -493,16 +513,20 @@ function HeroContact() {
           <path d="M0 32 L0 20 M0 32 L12 32" stroke={C.green} strokeWidth="1" opacity="0.25" />
         </svg>
       </div>
-      {/* Split layout — tight top padding so it hugs the navbar */}
+
+      {/*
+        ── LAYOUT FIX ──────────────────────────────────────────────────────────
+        Mobile:  single column, left panel then form panel stacked vertically
+        Desktop: side-by-side [left | divider | form]
+        Removed fixed minHeight on mobile so the form is never clipped.
+        ────────────────────────────────────────────────────────────────────────
+      */}
       <div
-        className="relative z-10 flex-1 grid lg:grid-cols-[1fr_1px_540px] gap-8 lg:gap-0"
-        style={{ 
-          minHeight: "calc(100vh - 64px)",
-          // Mobile-first: full height but allow natural flow
-        }}
+        className="relative z-10 flex flex-col lg:grid lg:grid-cols-[1fr_1px_540px]"
+        style={{ minHeight: "calc(100dvh - 64px)" }}
       >
         {/* LEFT */}
-        <div className="flex flex-col justify-center px-6 sm:px-12 lg:px-20 pt-8 pb-10 lg:pt-10 lg:pb-12">
+        <div className="flex flex-col justify-center px-5 sm:px-10 lg:px-20 pt-10 pb-6 lg:pt-10 lg:pb-12">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -522,16 +546,17 @@ function HeroContact() {
                 fontSize: 15,
                 lineHeight: 1.65,
                 maxWidth: 400,
-                marginBottom: "2rem",
+                marginBottom: "1.5rem",
               }}
               className="max-w-full"
             >
               <Typewriter text="Share your requirements and our engineering team will respond with a detailed quote within 24 hours." />
             </motion.p>
+
             {/* Promise list */}
             <div
               style={{
-                paddingTop: "1.75rem",
+                paddingTop: "1.5rem",
                 borderTop: `1px solid ${C.rule}`,
                 display: "flex",
                 flexDirection: "column",
@@ -547,21 +572,13 @@ function HeroContact() {
                   key={t}
                   initial={{ opacity: 0, x: -18 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{
-                    delay: 0.9 + i * 0.1,
-                    duration: 0.5,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
+                  transition={{ delay: 0.9 + i * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                   style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}
                 >
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    transition={{
-                      delay: 1.0 + i * 0.1,
-                      type: "spring",
-                      stiffness: 320,
-                    }}
+                    transition={{ delay: 1.0 + i * 0.1, type: "spring", stiffness: 320 }}
                     style={{
                       width: 20, height: 20, borderRadius: "50%",
                       background: C.greenXLight,
@@ -578,7 +595,8 @@ function HeroContact() {
             </div>
           </motion.div>
         </div>
-        {/* Animated divider */}
+
+        {/* Animated vertical divider — desktop only */}
         <motion.div
           initial={{ scaleY: 0 }}
           animate={{ scaleY: 1 }}
@@ -586,28 +604,29 @@ function HeroContact() {
           className="hidden lg:block origin-top"
           style={{ background: C.rule }}
         />
+
         {/* RIGHT — form */}
         <motion.div
-          initial={{ opacity: 0, x: 36 }}
+          initial={{ opacity: 0, x: 0 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.85, delay: 0.22, ease: [0.22, 1, 0.36, 1] }}
-          className="flex flex-col justify-center px-6 sm:px-8 md:px-10 lg:px-9 pt-6 pb-12 lg:pt-10 lg:pb-12"
+          className="flex flex-col justify-center px-5 sm:px-8 lg:px-9 pt-2 pb-10 lg:pt-10 lg:pb-12"
         >
+          {/* ── FORM CARD ── */}
           <div
             style={{
               background: C.white,
               border: `1px solid ${C.rule}`,
               borderRadius: 20,
-              padding: "28px 24px",
+              padding: "24px 20px",
               boxShadow: "0 2px 20px rgba(6,13,10,0.055)",
             }}
-            className="max-w-full mx-auto w-full"
           >
             {/* Header */}
             <div
               style={{
                 display: "flex", alignItems: "center", gap: 12,
-                marginBottom: 24, paddingBottom: 20,
+                marginBottom: 20, paddingBottom: 18,
                 borderBottom: `1px solid ${C.rule}`,
               }}
             >
@@ -632,6 +651,7 @@ function HeroContact() {
                 </div>
               </div>
             </div>
+
             <AnimatePresence mode="wait">
               {status === "success" ? (
                 <motion.div
@@ -659,11 +679,7 @@ function HeroContact() {
                   >
                     <CheckCircle2 size={28} style={{ color: C.green }} />
                   </motion.div>
-                  <motion.div
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.28 }}
-                  >
+                  <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.28 }}>
                     <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 700, color: C.ink, marginBottom: 6 }}>
                       Request sent.
                     </div>
@@ -678,15 +694,9 @@ function HeroContact() {
                     onClick={() => setStatus("idle")}
                     style={{
                       fontFamily: "'JetBrains Mono', monospace",
-                      fontSize: 11,
-                      textTransform: "uppercase",
-                      letterSpacing: "0.2em",
-                      color: C.green,
-                      background: "none",
-                      border: "none",
-                      cursor: "pointer",
-                      textDecoration: "underline",
-                      marginTop: 4,
+                      fontSize: 11, textTransform: "uppercase", letterSpacing: "0.2em",
+                      color: C.green, background: "none", border: "none",
+                      cursor: "pointer", textDecoration: "underline", marginTop: 4,
                     }}
                   >
                     Send another
@@ -702,27 +712,23 @@ function HeroContact() {
                   style={{ display: "flex", flexDirection: "column", gap: 14 }}
                   className="w-full"
                 >
-                  {/* Name + Company */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 sm:gap-4">
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     {[
                       { name: "name", label: "Full Name *", placeholder: "Your name", required: true },
                       { name: "company", label: "Company", placeholder: "Organisation", required: false },
                     ].map((f) => (
                       <div key={f.name} style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-                        <label
-                          style={{
-                            fontFamily: "'JetBrains Mono', monospace",
-                            fontSize: 10,
-                            textTransform: "uppercase",
-                            letterSpacing: "0.18em",
-                            color: C.steelLight,
-                          }}
-                        >
+                        <label style={{
+                          fontFamily: "'JetBrains Mono', monospace",
+                          fontSize: 10, textTransform: "uppercase",
+                          letterSpacing: "0.18em", color: C.steelLight,
+                        }}>
                           {f.label}
                         </label>
                         <input
                           name={f.name}
-                          value={(form as any)[f.name]}
+                          value={(form as Record<string, string>)[f.name]}
                           onChange={handleChange}
                           required={f.required}
                           placeholder={f.placeholder}
@@ -733,6 +739,7 @@ function HeroContact() {
                       </div>
                     ))}
                   </div>
+
                   {/* Email */}
                   <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
                     <label style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.18em", color: C.steelLight }}>
@@ -748,6 +755,7 @@ function HeroContact() {
                       onBlur={() => setFocused(null)}
                     />
                   </div>
+
                   {/* Subject */}
                   <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
                     <label style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.18em", color: C.steelLight }}>
@@ -766,6 +774,7 @@ function HeroContact() {
                         .map((v) => <option key={v} value={v}>{v}</option>)}
                     </select>
                   </div>
+
                   {/* Message */}
                   <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
                     <label style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.18em", color: C.steelLight }}>
@@ -781,6 +790,7 @@ function HeroContact() {
                       onBlur={() => setFocused(null)}
                     />
                   </div>
+
                   {/* Error */}
                   <AnimatePresence>
                     {status === "error" && (
@@ -801,6 +811,7 @@ function HeroContact() {
                       </motion.div>
                     )}
                   </AnimatePresence>
+
                   {/* Submit */}
                   <motion.button
                     type="submit"
@@ -809,22 +820,13 @@ function HeroContact() {
                     whileTap={{ scale: 0.975 }}
                     style={{
                       background: status === "sending" ? "rgba(0,176,80,0.38)" : C.green,
-                      color: "#FFF",
-                      border: "none",
-                      borderRadius: 12,
-                      padding: "13px 0",
-                      fontSize: 14,
-                      fontWeight: 700,
+                      color: "#FFF", border: "none", borderRadius: 12,
+                      padding: "13px 0", fontSize: 14, fontWeight: 700,
                       fontFamily: "'Syne', sans-serif",
                       cursor: status === "sending" ? "not-allowed" : "pointer",
                       boxShadow: status === "sending" ? "none" : "0 4px 18px rgba(0,176,80,0.28)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: 10,
-                      position: "relative",
-                      overflow: "hidden",
-                      marginTop: 2,
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      gap: 10, position: "relative", overflow: "hidden", marginTop: 2,
                     }}
                   >
                     {status !== "sending" && (
@@ -863,12 +865,8 @@ function HeroContact() {
                       </>
                     )}
                   </motion.button>
-                  <p
-                    style={{
-                      fontSize: 11, textAlign: "center",
-                      color: C.steelLight, marginTop: 2,
-                    }}
-                  >
+
+                  <p style={{ fontSize: 11, textAlign: "center", color: C.steelLight, marginTop: 2 }}>
                     We typically respond within 24 hours on business days.
                   </p>
                 </motion.form>
@@ -880,16 +878,14 @@ function HeroContact() {
     </section>
   );
 }
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // 2 · DIRECTORS
 // ═══════════════════════════════════════════════════════════════════════════════
 function DirectorsStrip() {
   return (
-    <section
-      className="relative py-12 md:py-20 overflow-hidden"
-      style={{ background: C.pageBg }}
-    >
-      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-12 lg:px-20">
+    <section className="relative py-12 md:py-20 overflow-hidden" style={{ background: C.pageBg }}>
+      <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-10 lg:px-20">
         <FadeUp style={{ marginBottom: 36 }}>
           <Eyebrow label="Direct Contact" />
           <h2
@@ -908,7 +904,7 @@ function DirectorsStrip() {
             {
               name: "T. Rajeshwara Kumar",
               title: "Director",
-              credentials:"",
+              credentials: "",
               phones: ["+91 94882 02023", "+91 63817 33925"],
               accent: C.green,
               i: 0,
@@ -925,10 +921,7 @@ function DirectorsStrip() {
             <FadeUp key={d.i} delay={d.i * 0.13}>
               <TiltCard>
                 <motion.div
-                  whileHover={{
-                    boxShadow: `0 16px 40px rgba(0,176,80,0.14)`,
-                    borderColor: d.accent,
-                  }}
+                  whileHover={{ boxShadow: `0 16px 40px rgba(0,176,80,0.14)`, borderColor: d.accent }}
                   transition={{ duration: 0.22 }}
                   style={{
                     background: C.white,
@@ -940,13 +933,11 @@ function DirectorsStrip() {
                     gap: 20,
                   }}
                 >
-                  {/* Avatar + name */}
                   <div style={{ display: "flex", alignItems: "flex-start", gap: 14 }}>
                     <motion.div
                       whileHover={{ scale: 1.07, rotate: 4 }}
                       style={{
-                        width: 48, height: 48,
-                        borderRadius: 14,
+                        width: 48, height: 48, borderRadius: 14,
                         background: C.greenXLight,
                         border: `1px solid rgba(0,176,80,0.22)`,
                         display: "flex", alignItems: "center", justifyContent: "center",
@@ -960,79 +951,32 @@ function DirectorsStrip() {
                       {d.name.split(" ").map((w: string) => w[0]).slice(0, 2).join("")}
                     </motion.div>
                     <div>
-                      <div
-                        style={{
-                          fontFamily: "'Syne', sans-serif",
-                          fontSize: 15, fontWeight: 700, color: C.ink,
-                        }}
-                      >
+                      <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 700, color: C.ink }}>
                         {d.name}
                         {d.credentials && (
-                          <span
-                            style={{
-                              marginLeft: 8,
-                              fontFamily: "'JetBrains Mono', monospace",
-                              fontSize: 11,
-                              color: d.accent,
-                              verticalAlign: "middle",
-                            }}
-                          >
+                          <span style={{ marginLeft: 8, fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: d.accent, verticalAlign: "middle" }}>
                             {d.credentials}
                           </span>
                         )}
                       </div>
-                      <div
-                        style={{
-                          fontFamily: "'JetBrains Mono', monospace",
-                          fontSize: 10,
-                          textTransform: "uppercase",
-                          letterSpacing: "0.2em",
-                          color: C.steelLight,
-                          marginTop: 2,
-                        }}
-                      >
+                      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.2em", color: C.steelLight, marginTop: 2 }}>
                         {d.title}
                       </div>
                     </div>
                   </div>
-                  {/* Phones */}
-                  <div
-                    style={{
-                      paddingTop: 16,
-                      borderTop: `1px solid ${C.rule}`,
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: 10,
-                    }}
-                  >
+                  <div style={{ paddingTop: 16, borderTop: `1px solid ${C.rule}`, display: "flex", flexDirection: "column", gap: 10 }}>
                     {d.phones.map((p: string) => (
                       <motion.a
                         key={p}
                         href={`tel:${p.replace(/\s/g, "")}`}
                         whileHover={{ x: 5 }}
                         transition={{ duration: 0.16 }}
-                        style={{
-                          display: "flex", alignItems: "center", gap: 10,
-                          textDecoration: "none",
-                        }}
+                        style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}
                       >
-                        <div
-                          style={{
-                            width: 28, height: 28, borderRadius: 8,
-                            background: C.greenXLight,
-                            display: "flex", alignItems: "center", justifyContent: "center",
-                            flexShrink: 0,
-                          }}
-                        >
+                        <div style={{ width: 28, height: 28, borderRadius: 8, background: C.greenXLight, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                           <Phone size={12} style={{ color: d.accent }} strokeWidth={2} />
                         </div>
-                        <span
-                          style={{
-                            fontFamily: "'JetBrains Mono', monospace",
-                            fontSize: 13,
-                            color: C.inkMid,
-                          }}
-                        >
+                        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13, color: C.inkMid }}>
                           {p}
                         </span>
                       </motion.a>
@@ -1047,6 +991,7 @@ function DirectorsStrip() {
     </section>
   );
 }
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // 3 · DETAILS RAIL
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -1076,7 +1021,7 @@ function DetailsRail() {
   ];
   return (
     <section className="relative py-12 md:py-20" style={{ background: C.white }}>
-      <div className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-20">
+      <div className="max-w-7xl mx-auto px-5 sm:px-10 lg:px-20">
         <FadeUp style={{ marginBottom: 36 }}>
           <Eyebrow label="Get in Touch" />
         </FadeUp>
@@ -1088,11 +1033,7 @@ function DetailsRail() {
                   href={d.href}
                   target={d.href.startsWith("http") ? "_blank" : undefined}
                   rel="noopener noreferrer"
-                  whileHover={{
-                    y: -6,
-                    boxShadow: `0 18px 40px rgba(0,176,80,0.10)`,
-                    borderColor: C.greenGlow,
-                  }}
+                  whileHover={{ y: -6, boxShadow: `0 18px 40px rgba(0,176,80,0.10)`, borderColor: C.greenGlow }}
                   transition={{ duration: 0.2 }}
                   style={{
                     display: "flex", flexDirection: "column", gap: 16,
@@ -1117,42 +1058,17 @@ function DetailsRail() {
                     <d.icon size={18} style={{ color: C.green }} strokeWidth={1.6} />
                   </motion.div>
                   <div style={{ flex: 1 }}>
-                    <div
-                      style={{
-                        fontFamily: "'JetBrains Mono', monospace",
-                        fontSize: 10,
-                        textTransform: "uppercase",
-                        letterSpacing: "0.22em",
-                        color: C.green,
-                        marginBottom: 5,
-                      }}
-                    >
+                    <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.22em", color: C.green, marginBottom: 5 }}>
                       {d.label}
                     </div>
-                    <div
-                      style={{
-                        fontFamily: "'Syne', sans-serif",
-                        fontSize: 14, fontWeight: 700,
-                        color: C.ink, marginBottom: 6,
-                        lineHeight: 1.35,
-                      }}
-                    >
+                    <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, color: C.ink, marginBottom: 6, lineHeight: 1.35 }}>
                       {d.value}
                     </div>
                     <div style={{ fontSize: 12, color: C.steelLight, lineHeight: 1.6 }}>
                       {d.sub}
                     </div>
                   </div>
-                  <div
-                    style={{
-                      display: "flex", alignItems: "center", gap: 4,
-                      fontFamily: "'JetBrains Mono', monospace",
-                      fontSize: 10,
-                      textTransform: "uppercase",
-                      letterSpacing: "0.18em",
-                      color: C.green,
-                    }}
-                  >
+                  <div style={{ display: "flex", alignItems: "center", gap: 4, fontFamily: "'JetBrains Mono', monospace", fontSize: 10, textTransform: "uppercase", letterSpacing: "0.18em", color: C.green }}>
                     <ChevronRight size={13} />
                     Open
                   </div>
@@ -1165,6 +1081,7 @@ function DetailsRail() {
     </section>
   );
 }
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // 4 · MAP
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -1187,7 +1104,6 @@ function MapSection() {
         }}
         className="sm:mx-8 md:mx-12 lg:mx-20"
       >
-        {/* Overlay pill */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -1207,14 +1123,7 @@ function MapSection() {
             transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
             style={{ width: 7, height: 7, borderRadius: "50%", background: C.green }}
           />
-          <span
-            style={{
-              fontFamily: "'JetBrains Mono', monospace",
-              fontSize: 11, color: C.ink,
-              textTransform: "uppercase",
-              letterSpacing: "0.18em",
-            }}
-          >
+          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: C.ink, textTransform: "uppercase", letterSpacing: "0.18em" }}>
             Comsia Industrial Estate, Coimbatore
           </span>
         </motion.div>
