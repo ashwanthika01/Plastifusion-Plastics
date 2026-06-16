@@ -232,7 +232,7 @@ function HeroSection() {
               {[
                 { v: "20+",   l: "Years" },
                 { v: "160T",  l: "Max Tonnage" },
-                { v: "±0.05", l: "mm Tolerance" },
+                { v: "±0.5", l: "mm Tolerance" },
                 { v: "800g",  l: "Shot Weight" },
                 { v: "10+",   l: "Materials" },
               ].map((s) => (
@@ -354,7 +354,7 @@ function HeroSection() {
 const zones = [
   { n: "01", icon: Factory,    label: "Production Floor", sub: "24/7 injection moulding with real-time process monitoring" },
   { n: "02", icon: Wrench,     label: "Tool Room",        sub: "In-house CNC & EDM mould manufacturing" },
-  { n: "03", icon: Microscope, label: "Inspection Lab",   sub: "CMM & optical systems at ±0.05 mm" },
+  { n: "03", icon: Microscope, label: "Inspection Lab",   sub: "CMM & optical systems at ±0.5 mm" },
   { n: "04", icon: LayoutGrid, label: "Assembly",         sub: "Clean-cell sub-assembly and insert moulding" },
   { n: "05", icon: Truck,      label: "Logistics",        sub: "Full traceability from resin lot to delivery" },
 ];
@@ -482,7 +482,7 @@ function InjectionSection() {
               {[
                 ["Clamping Force",    "120T – 160T"],
                 ["Shot Weight",       "Up to 800 g"],
-                ["Tolerance",         "±0.05 mm"],
+                ["Tolerance",         "±0.5 mm"],
                 ["Process Monitor",   "Real-time SPC"],
                 ["Mould Change",      "< 45 minutes"],
                 ["Schedule",          "24 / 5 Production"],
@@ -590,7 +590,7 @@ const mouldSteps = [
 const toolHighlights = [
   { title: "P20 & H13 Steel", desc: "Hardened tool steels rated for 500,000+ shots with dimensional stability maintained throughout the tool's life." },
   { title: "Wire EDM",        desc: "Sub-micron wire electrical discharge machining for complex core and cavity geometries impossible by conventional cutting." },
-  { title: "CNC 3-Axis",      desc: "High-speed 3-axis CNC machining of base plates, runners, and cavity inserts to ±0.01 mm positioning accuracy." },
+  { title: "CNC 3-Axis",      desc: "High-speed 3-axis CNC machining of base plates, runners, and cavity inserts to ±0.5 mm positioning accuracy." },
   { title: "In-House",        desc: "No outsourcing. Full control of the mould build schedule — faster iterations, lower costs, tighter tolerance handoffs." },
 ];
 
@@ -812,7 +812,7 @@ function TimelineSection() {
 // ═══════════════════════════════════════════════════════════════════════════════
 const metrics = [
   { n: "ISO",   sub: "9001:2015", label: "Quality Certification",  icon: BadgeCheck },
-  { n: "±0.05", sub: "mm",        label: "Dimensional Tolerance",  icon: Target },
+  { n: "±0.5", sub: "mm",        label: "Dimensional Tolerance",  icon: Target },
   { n: "100",   sub: "%",          label: "Batch Inspection",       icon: ShieldCheck },
   { n: "Cpk",   sub: ">1.33",      label: "Process Capability",     icon: Activity },
 ];
@@ -1076,7 +1076,7 @@ function IndustriesSection() {
 // ═══════════════════════════════════════════════════════════════════════════════
 const strengths = [
   { icon: Zap,          t: "Fast Turnaround",          d: "Expedited tooling paths and reserved machine slots for time-critical programmes." },
-  { icon: Repeat2,      t: "Repeat Orders in 24–48 h", d: "Stored process parameters allow rapid re-initiation of any validated job." },
+  { icon: Repeat2,      t: "Repeat Orders in 48 h",    d: "Stored process parameters allow rapid re-initiation of any validated job." },
   { icon: DollarSign,   t: "Cost-Efficient",            d: "In-house tooling eliminates third-party mark-ups; high-efficiency cycles cut unit cost." },
   { icon: Wrench,       t: "Engineering Support",       d: "DFM reviews, material guidance, and tooling consultation from day one." },
   { icon: HardDrive,    t: "500k+ Shot Tooling",        d: "P20 and H13 moulds built for longevity with minimal dimensional wear." },
@@ -1174,7 +1174,7 @@ function StrengthsSection() {
                 Ready to start your next project?
               </div>
               <div className="text-xs sm:text-sm" style={{ color: C.inkLight }}>
-                Engineering team typically responds within 24 hours.
+                Engineering team typically responds within 48 hours.
               </div>
             </div>
             <motion.a

@@ -12,6 +12,7 @@ import {
   Globe,
   MessageCircle,
   X,
+  FileText,
 } from "lucide-react";
 
 /* ─── Data ─────────────────────────────────────────────── */
@@ -359,6 +360,12 @@ export default function Footer() {
 
                 {/* Clickable contact rows */}
                 {[
+                  {
+  icon: FileText, 
+  label: "GSTIN",
+  value: "33AAQCP9396K1ZG", 
+  onClick: () => {},
+},
                   {
                     icon: Phone,
                     label: "Contact",

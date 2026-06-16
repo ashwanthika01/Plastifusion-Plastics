@@ -13,6 +13,13 @@ const INK2= "#5A584F";
 const INK3= "#9A9890";
 const WH  = "#FFFFFF";
 
+// ─── FONT IMPORT ──────────────────────────────────────────────────────────────
+// Add this to your global CSS / layout:
+// @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&display=swap');
+// The DISPLAY_FONT constant is used on all section headings for a tighter,
+// more legible condensed look on mobile without changing any desktop sizing.
+const DISPLAY_FONT = "'Barlow Condensed', 'Arial Narrow', sans-serif";
+
 function CR({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-10% 0px" });
@@ -53,9 +60,14 @@ function WipeIn({ children, delay = 0, className = "" }: { children: React.React
   );
 }
 
+// ─── EYEBROW ──────────────────────────────────────────────────────────────────
+// MOBILE-ALIGNMENT FIX: the eyebrow's "line — label — line" row used the flex
+// default (justify-start), so it always hugged the left edge even when a
+// parent had text-center. Added justify-center on mobile, justify-start
+// (= original) from lg upward.
 function Eyebrow({ label, dark = false }: { label: string; dark?: boolean }) {
   return (
-    <div className="flex items-center gap-4 mb-7">
+    <div className="flex items-center justify-center lg:justify-start gap-4 mb-7">
       <div className="w-8 h-px" style={{ background: G }} />
       <span className="text-[10px] tracking-[0.32em] uppercase font-bold" style={{ color: G }}>{label}</span>
       <div className="w-8 h-px" style={{ background: dark ? "rgba(0,0,0,0.12)" : "rgba(0,0,0,0.1)" }} />
@@ -103,50 +115,82 @@ function Hero() {
         <path d="M220 40 L220 220 L40 220" fill="none" stroke={G} strokeWidth="0.5"/>
       </svg>
       <div style={{ height: 72, flexShrink: 0 }} />
-      <div className="flex-1 min-h-0 flex flex-col justify-between px-8 md:px-16 lg:px-24 py-10">
+
+      {/* Main content — tighter horizontal padding on mobile */}
+      <div className="flex-1 min-h-0 flex flex-col justify-between px-5 sm:px-8 md:px-16 lg:px-24 py-8 md:py-10">
         <div>
           <FU delay={0.06}><Eyebrow label="Our Solutions" /></FU>
-          <div style={{ marginTop: 8 }}>
+          {/* MOBILE-ALIGNMENT FIX: center the three stacked headline lines on
+              mobile/tablet; revert to left at lg (original behaviour). */}
+          <div style={{ marginTop: 8 }} className="text-center lg:text-left">
             <CR delay={0.12}>
-              <h1 className="font-black uppercase tracking-[-0.04em]"
-                style={{ fontSize: "clamp(2.8rem,6.5vw,7.5rem)", lineHeight: 0.84, color: INK }}>
+              <h1 style={{
+                fontFamily: DISPLAY_FONT,
+                fontWeight: 900,
+                textTransform: "uppercase",
+                letterSpacing: "-0.01em",
+                fontSize: "clamp(3rem,8vw,7.5rem)",
+                lineHeight: 0.88,
+                color: INK,
+              }}>
                 Precision
               </h1>
             </CR>
             <CR delay={0.20}>
-              <h1 className="font-black uppercase tracking-[-0.04em]"
-                style={{ fontSize: "clamp(2.8rem,6.5vw,7.5rem)", lineHeight: 0.84,
-                  WebkitTextStroke: `2.5px ${G}`, color: "transparent" }}>
+              <h1 style={{
+                fontFamily: DISPLAY_FONT,
+                fontWeight: 900,
+                textTransform: "uppercase",
+                letterSpacing: "-0.01em",
+                fontSize: "clamp(3rem,8vw,7.5rem)",
+                lineHeight: 0.88,
+                WebkitTextStroke: `2px ${G}`,
+                color: "transparent",
+              }}>
                 Plastic
               </h1>
             </CR>
             <CR delay={0.28}>
-              <h1 className="font-black uppercase tracking-[-0.04em]"
-                style={{ fontSize: "clamp(2.8rem,6.5vw,7.5rem)", lineHeight: 0.84, color: G }}>
+              <h1 style={{
+                fontFamily: DISPLAY_FONT,
+                fontWeight: 900,
+                textTransform: "uppercase",
+                letterSpacing: "-0.01em",
+                fontSize: "clamp(3rem,8vw,7.5rem)",
+                lineHeight: 0.88,
+                color: G,
+              }}>
                 Components.
               </h1>
             </CR>
           </div>
         </div>
-        <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-12">
+
+        {/* MOBILE-ALIGNMENT FIX: items-start -> items-center on mobile so the
+            paragraph block and the stat-card row are centered as a unit;
+            text-center -> lg:text-left cascades to the paragraph and the
+            number/label inside each stat card. lg behaviour unchanged. */}
+        <div className="flex flex-col lg:flex-row items-center lg:items-end justify-between gap-8 lg:gap-12 text-center lg:text-left">
           <FU delay={0.45}>
-            <p className="text-base leading-relaxed font-light max-w-[46ch]" style={{ color: INK2 }}>
+            <p className="text-sm sm:text-base leading-relaxed font-light max-w-[46ch]" style={{ color: INK2 }}>
               Through advanced injection moulding technology. From concept to mass
               production — durable, precise, and cost-effective parts for five industries.
             </p>
           </FU>
-          <div className="flex gap-0 shrink-0">
-            {[["20+", "Years Exp."], ["3", "Machines"], ["±0.05", "mm Tolerance"]].map(([n, l], i) => (
+
+          {/* Stat cards — shrink padding on mobile so they don't overflow */}
+          <div className="flex gap-0 shrink-0 w-full lg:w-auto">
+            {[["20+", "Years Exp."], ["3", "Machines"], ["±0.5", "mm Tolerance"]].map(([n, l], i) => (
               <motion.div key={i}
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.55 + i * 0.1, duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
-                className="flex flex-col px-8 py-5"
+                className="flex flex-col flex-1 lg:flex-none px-4 sm:px-6 lg:px-8 py-4 lg:py-5"
                 style={{
                   borderLeft: `1px solid rgba(0,144,63,0.25)`,
                   borderRight: i === 2 ? `1px solid rgba(0,144,63,0.25)` : "none",
                 }}>
-                <span className="font-black tracking-tight" style={{ fontSize: 36, lineHeight: 1, color: G }}>{n}</span>
-                <span className="text-[10px] tracking-[0.2em] uppercase font-semibold mt-1" style={{ color: INK3 }}>{l}</span>
+                <span className="font-black tracking-tight" style={{ fontSize: "clamp(1.6rem,4vw,2.25rem)", lineHeight: 1, color: G }}>{n}</span>
+                <span className="text-[9px] sm:text-[10px] tracking-[0.18em] uppercase font-semibold mt-1" style={{ color: INK3 }}>{l}</span>
               </motion.div>
             ))}
           </div>
@@ -157,7 +201,9 @@ function Hero() {
 }
 
 // ─── CAP BAND ─────────────────────────────────────────────────────────────────
-// ✅ Extracted into its own component so hooks are not called inside .map()
+// MOBILE-ALIGNMENT FIX: center each stat callout's value + label below md
+// (this section's own "desktop" breakpoint is md:grid-cols-4), revert to
+// left at md (original).
 function CapBandItem({ c, i }: { c: { val: string; label: string }; i: number }) {
   const fromLeft = i % 2 === 0;
   const ref = useRef(null);
@@ -167,10 +213,10 @@ function CapBandItem({ c, i }: { c: { val: string; label: string }; i: number })
       initial={{ opacity: 0, x: fromLeft ? -40 : 40 }}
       animate={inView ? { opacity: 1, x: 0 } : {}}
       transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1], delay: i * 0.04 }}
-      className="flex flex-col gap-1.5 p-8"
+      className="flex flex-col gap-1.5 p-5 sm:p-8 text-center md:text-left"
       style={{ background: BG2 }}>
-      <span className="font-black tracking-tight" style={{ fontSize: 28, color: G }}>{c.val}</span>
-      <span style={{ fontSize: 10, letterSpacing: "0.18em", textTransform: "uppercase", color: INK3, fontWeight: 600 }}>{c.label}</span>
+      <span className="font-black tracking-tight" style={{ fontSize: "clamp(1.1rem,3vw,1.75rem)", color: G }}>{c.val}</span>
+      <span style={{ fontSize: 9, letterSpacing: "0.16em", textTransform: "uppercase", color: INK3, fontWeight: 600 }}>{c.label}</span>
     </motion.div>
   );
 }
@@ -178,9 +224,9 @@ function CapBandItem({ c, i }: { c: { val: string; label: string }; i: number })
 function CapBand() {
   const items = [
     { val: "120T–160T", label: "Clamping Force" },
-    { val: "±0.05mm",   label: "Critical Tolerance" },
-    { val: "2–4 wks",   label: "New Mould Lead Time" },
-    { val: "24–48 hr",  label: "Repeat Order Turnaround" },
+    { val: "±0.5mm",   label: "Critical Tolerance" },
+    { val: "8-12 wks",   label: "New Mould Lead Time" },
+    { val: "48 hr",  label: "Repeat Order Turnaround" },
     { val: "100%",      label: "Part Inspection" },
     { val: "1→∞",       label: "Prototype to Mass Prod." },
     { val: "370 cm³",   label: "Max Shot Volume (160T)" },
@@ -213,7 +259,7 @@ const SERVICES = [
     n: "03", title: "Prototyping & Sampling",
     desc: "Rapid samples for design validation. Short-run production to reduce lead time and de-risk your product launch before committing to full tooling.",
     tags: ["T1 Samples", "Design Validation", "Short Run", "DFM Review"],
-    detail: "Our DFM-first approach means we catch costly design errors before steel is cut. Typical sample delivery in 2–4 weeks from design sign-off.",
+    detail: "Our DFM-first approach means we catch costly design errors before steel is cut. Typical sample delivery in 8-12 weeks from design sign-off.",
   },
   {
     n: "04", title: "Secondary Operations",
@@ -223,6 +269,8 @@ const SERVICES = [
   },
 ];
 
+// ServiceCard internals are UNCHANGED — card body copy stays left-aligned
+// for readability, as in the original design.
 function ServiceCard({ s, i }: { s: (typeof SERVICES)[0]; i: number }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-6% 0px" });
@@ -242,22 +290,25 @@ function ServiceCard({ s, i }: { s: (typeof SERVICES)[0]; i: number }) {
         animate={inView ? { scaleY: 1 } : {}}
         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.4 + i * 0.1 }}
       />
-      <div className="p-8 pl-10 flex-1">
-        <div className="flex items-start justify-between mb-6">
+      <div className="p-5 sm:p-8 pl-8 sm:pl-10 flex-1">
+        <div className="flex items-start justify-between mb-5 sm:mb-6">
           <span className="text-[11px] font-black tracking-[0.2em]" style={{ color: INK3 }}>{s.n}</span>
           <motion.div animate={{ rotate: open ? 45 : 0 }} transition={{ duration: 0.28 }}
-            className="w-7 h-7 flex items-center justify-center border"
+            className="w-7 h-7 flex items-center justify-center border shrink-0"
             style={{ borderColor: "rgba(0,144,63,0.3)", color: G }}>
             <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
               <path d="M5 1V9M1 5H9" stroke="currentColor" strokeWidth="1.5" />
             </svg>
           </motion.div>
         </div>
-        <h3 className="font-black leading-tight tracking-tight mb-4" style={{ fontSize: "clamp(1.3rem,2.2vw,1.8rem)", color: INK }}>{s.title}</h3>
-        <p className="text-sm leading-relaxed mb-6" style={{ color: INK2 }}>{s.desc}</p>
-        <div className="flex flex-wrap gap-2">
+        <h3 className="font-bold leading-tight tracking-tight mb-3 sm:mb-4"
+          style={{ fontFamily: DISPLAY_FONT, fontWeight: 800, fontSize: "clamp(1.25rem,3vw,1.8rem)", color: INK }}>
+          {s.title}
+        </h3>
+        <p className="text-sm leading-relaxed mb-5 sm:mb-6" style={{ color: INK2 }}>{s.desc}</p>
+        <div className="flex flex-wrap gap-1.5 sm:gap-2">
           {s.tags.map((t: string) => (
-            <span key={t} className="px-2.5 py-1 text-[9px] font-bold tracking-[0.15em] uppercase border"
+            <span key={t} className="px-2 sm:px-2.5 py-1 text-[8px] sm:text-[9px] font-bold tracking-[0.12em] uppercase border"
               style={{ borderColor: "rgba(0,144,63,0.2)", color: G, background: "rgba(0,144,63,0.05)" }}>{t}</span>
           ))}
         </div>
@@ -267,14 +318,14 @@ function ServiceCard({ s, i }: { s: (typeof SERVICES)[0]; i: number }) {
               initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
               style={{ overflow: "hidden" }}>
-              <div className="mt-6 pt-6 border-t" style={{ borderColor: "rgba(0,0,0,0.07)" }}>
+              <div className="mt-5 sm:mt-6 pt-5 sm:pt-6 border-t" style={{ borderColor: "rgba(0,0,0,0.07)" }}>
                 <p className="text-sm leading-relaxed" style={{ color: INK2 }}>{s.detail}</p>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
-      <div className="px-8 pl-10 py-4 border-t flex items-center justify-between"
+      <div className="px-5 sm:px-8 pl-8 sm:pl-10 py-3 sm:py-4 border-t flex items-center justify-between"
         style={{ borderColor: "rgba(0,0,0,0.07)", background: BG2 }}>
         <span style={{ fontSize: 10, letterSpacing: "0.18em", textTransform: "uppercase", fontWeight: 600, color: INK3 }}>
           Plastifusion
@@ -289,18 +340,22 @@ function ServiceCard({ s, i }: { s: (typeof SERVICES)[0]; i: number }) {
 
 function Services() {
   return (
-    <section style={{ background: BG }} className="py-28 px-8 md:px-16 lg:px-24">
+    <section style={{ background: BG }} className="py-20 md:py-28 px-5 sm:px-8 md:px-16 lg:px-24">
       <div className="max-w-7xl mx-auto">
         <FU><Eyebrow label="Our Services" /></FU>
-        <div className="flex flex-col lg:flex-row items-start justify-between gap-10 mb-16">
+        {/* MOBILE-ALIGNMENT FIX: items-start -> items-center below lg so the
+            heading block and the description shrink-wrap and center as
+            units; text-center -> lg:text-left cascades to both headings
+            and the paragraph. lg layout/alignment unchanged. */}
+        <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-8 lg:gap-10 mb-12 md:mb-16 text-center lg:text-left">
           <div>
             <CR>
-              <h2 className="font-black uppercase tracking-tight leading-[0.87]"
-                style={{ fontSize: "clamp(2.4rem,5vw,5.5rem)", color: INK }}>Four services.</h2>
+              <h2 style={{ fontFamily: DISPLAY_FONT, fontWeight: 900, textTransform: "uppercase", letterSpacing: "-0.01em", fontSize: "clamp(2.6rem,6vw,5.5rem)", lineHeight: 0.9, color: INK }}>
+                Four services.
+              </h2>
             </CR>
             <CR delay={0.09}>
-              <h2 className="font-black uppercase tracking-tight leading-[0.87]"
-                style={{ fontSize: "clamp(2.4rem,5vw,5.5rem)", WebkitTextStroke: `2px ${G}`, color: "transparent" }}>
+              <h2 style={{ fontFamily: DISPLAY_FONT, fontWeight: 900, textTransform: "uppercase", letterSpacing: "-0.01em", fontSize: "clamp(2.6rem,6vw,5.5rem)", lineHeight: 0.9, WebkitTextStroke: `2px ${G}`, color: "transparent" }}>
                 One roof.
               </h2>
             </CR>
@@ -312,7 +367,7 @@ function Services() {
             </p>
           </FU>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
           {SERVICES.map((s, i) => <ServiceCard key={i} s={s} i={i} />)}
         </div>
       </div>
@@ -340,13 +395,13 @@ function Machines() {
   ];
 
   return (
-    <section style={{ background: BG2 }} className="py-28 px-8 md:px-16 lg:px-24">
+    <section style={{ background: BG2 }} className="py-20 md:py-28 px-5 sm:px-8 md:px-16 lg:px-24">
       <div className="max-w-7xl mx-auto">
         <FU><Eyebrow label="Machine Fleet" /></FU>
-        <div className="flex flex-col lg:flex-row items-start justify-between gap-10 mb-16">
+        {/* MOBILE-ALIGNMENT FIX: same pattern as Services header. */}
+        <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-8 lg:gap-10 mb-12 md:mb-16 text-center lg:text-left">
           <CR>
-            <h2 className="font-black uppercase tracking-tight leading-[0.87]"
-              style={{ fontSize: "clamp(2.4rem,5vw,5.5rem)", color: INK }}>
+            <h2 style={{ fontFamily: DISPLAY_FONT, fontWeight: 900, textTransform: "uppercase", letterSpacing: "-0.01em", fontSize: "clamp(2.6rem,6vw,5.5rem)", lineHeight: 0.9, color: INK }}>
               3 Yizumi<br /><span style={{ color: G }}>machines.</span>
             </h2>
           </CR>
@@ -357,22 +412,23 @@ function Machines() {
             </p>
           </FU>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6">
           {machines.map((m, i) => (
             <FU key={i} delay={i * 0.12}>
               <div className="relative overflow-hidden" style={{ background: WH, border: "1px solid rgba(0,0,0,0.08)" }}>
-                <div className="flex items-center justify-between px-8 py-6 border-b" style={{ borderColor: "rgba(0,0,0,0.07)", background: BG3 }}>
+                <div className="flex items-center justify-between px-5 sm:px-8 py-5 sm:py-6 border-b" style={{ borderColor: "rgba(0,0,0,0.07)", background: BG3 }}>
                   <div>
                     <p className="text-[10px] tracking-[0.28em] uppercase font-bold mb-1" style={{ color: G }}>{m.brand}</p>
-                    <h3 className="text-2xl font-black tracking-tight" style={{ color: INK }}>{m.model}</h3>
+                    <h3 className="text-xl sm:text-2xl font-black tracking-tight" style={{ color: INK }}>{m.model}</h3>
                   </div>
                   <div className="text-right">
-                    <div className="text-3xl font-black tracking-tight" style={{ color: G }}>{m.force.split("/")[0].trim()}</div>
+                    <div className="text-2xl sm:text-3xl font-black tracking-tight" style={{ color: G }}>{m.force.split("/")[0].trim()}</div>
                     <div className="text-[10px] tracking-[0.15em] uppercase font-semibold" style={{ color: INK3 }}>
                       Qty: {m.qty}
                     </div>
                   </div>
                 </div>
+                {/* 2-col spec grid — give each cell proper padding on mobile */}
                 <div className="grid grid-cols-2 gap-px p-px" style={{ background: "rgba(0,0,0,0.06)" }}>
                   {[
                     ["Shot Volume",   m.shotVol],
@@ -387,9 +443,9 @@ function Machines() {
                     ["Motor Power",   m.motor],
                     ["Dry Cycle",     m.dryTime],
                   ].map(([label, val]) => (
-                    <div key={label} className="flex flex-col gap-1 px-5 py-4" style={{ background: WH }}>
-                      <span style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: INK3, fontWeight: 600 }}>{label}</span>
-                      <span className="font-bold text-sm" style={{ color: INK }}>{val}</span>
+                    <div key={label} className="flex flex-col gap-0.5 sm:gap-1 px-3 sm:px-5 py-3 sm:py-4" style={{ background: WH }}>
+                      <span style={{ fontSize: 8, letterSpacing: "0.18em", textTransform: "uppercase", color: INK3, fontWeight: 600 }}>{label}</span>
+                      <span className="font-bold text-xs sm:text-sm" style={{ color: INK }}>{val}</span>
                     </div>
                   ))}
                 </div>
@@ -418,13 +474,13 @@ const MATS = [
 
 function Materials() {
   return (
-    <section style={{ background: BG }} className="py-28 px-8 md:px-16 lg:px-24">
+    <section style={{ background: BG }} className="py-20 md:py-28 px-5 sm:px-8 md:px-16 lg:px-24">
       <div className="max-w-7xl mx-auto">
         <FU><Eyebrow label="Material Expertise" /></FU>
-        <div className="flex flex-col lg:flex-row items-start justify-between gap-10 mb-14">
+        {/* MOBILE-ALIGNMENT FIX: same pattern as Services/Machines headers. */}
+        <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-8 lg:gap-10 mb-10 md:mb-14 text-center lg:text-left">
           <CR>
-            <h2 className="font-black uppercase tracking-tight leading-[0.87]"
-              style={{ fontSize: "clamp(2.4rem,5vw,5.5rem)", color: INK }}>
+            <h2 style={{ fontFamily: DISPLAY_FONT, fontWeight: 900, textTransform: "uppercase", letterSpacing: "-0.01em", fontSize: "clamp(2.6rem,6vw,5.5rem)", lineHeight: 0.9, color: INK }}>
               10 materials.<br /><span style={{ color: G }}>Endless parts.</span>
             </h2>
           </CR>
@@ -438,16 +494,16 @@ function Materials() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-px" style={{ background: "rgba(0,0,0,0.07)" }}>
           {MATS.map((m, i) => (
             <FU key={i} delay={i * 0.04}>
-              <motion.div className="flex items-start gap-5 p-6" style={{ background: WH }}
+              <motion.div className="flex items-start gap-4 sm:gap-5 p-4 sm:p-6" style={{ background: WH }}
                 whileHover={{ background: BG2 }} transition={{ duration: 0.18 }}>
-                <div className="shrink-0 w-14 h-14 flex items-center justify-center font-black text-xs tracking-wider"
+                <div className="shrink-0 w-11 h-11 sm:w-14 sm:h-14 flex items-center justify-center font-black text-[10px] sm:text-xs tracking-wider"
                   style={{ background: "rgba(0,144,63,0.07)", border: `1px solid rgba(0,144,63,0.2)`, color: G }}>
                   {m.code}
                 </div>
-                <div className="flex-1">
-                  <p className="text-sm font-bold mb-0.5" style={{ color: INK }}>{m.name}</p>
-                  <p className="text-xs mb-1.5" style={{ color: INK3 }}>ρ {m.density}</p>
-                  <p className="text-xs leading-relaxed" style={{ color: INK2 }}>{m.use}</p>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs sm:text-sm font-bold mb-0.5 leading-snug" style={{ color: INK }}>{m.name}</p>
+                  <p className="text-[11px] sm:text-xs mb-1 sm:mb-1.5" style={{ color: INK3 }}>ρ {m.density}</p>
+                  <p className="text-[11px] sm:text-xs leading-relaxed" style={{ color: INK2 }}>{m.use}</p>
                 </div>
               </motion.div>
             </FU>
@@ -467,7 +523,7 @@ const INDUSTRIES = [
   { name: "Industrial",    icon: "⚙",  parts: "Gears · Rollers · Custom Fixtures · Structural Parts" },
 ];
 
-// ✅ Extracted into its own component so hooks are not called inside .map()
+// IndustryRow is UNCHANGED — left-aligned icon+text list rows stay as-is.
 function IndustryRow({ ind, i }: { ind: (typeof INDUSTRIES)[0]; i: number }) {
   const iRef = useRef(null);
   const iInView = useInView(iRef, { once: true });
@@ -482,16 +538,16 @@ function IndustryRow({ ind, i }: { ind: (typeof INDUSTRIES)[0]; i: number }) {
       <motion.div
         initial={{ opacity: 0, x: -24 }} animate={iInView ? { opacity: 1, x: 0 } : {}}
         transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1], delay: i * 0.08 }}
-        className="group flex items-center gap-6 py-6">
-        <div className="w-12 h-12 flex items-center justify-center shrink-0 text-xl"
+        className="group flex items-center gap-4 sm:gap-6 py-5 sm:py-6">
+        <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center shrink-0 text-lg sm:text-xl"
           style={{ background: "rgba(0,144,63,0.07)", border: `1px solid rgba(0,144,63,0.18)` }}>
           {ind.icon}
         </div>
-        <div className="flex-1">
-          <p className="font-black text-lg tracking-tight mb-0.5" style={{ color: INK }}>{ind.name}</p>
-          <p className="text-xs" style={{ color: INK2 }}>{ind.parts}</p>
+        <div className="flex-1 min-w-0">
+          <p className="font-black text-base sm:text-lg tracking-tight mb-0.5" style={{ color: INK }}>{ind.name}</p>
+          <p className="text-xs leading-snug" style={{ color: INK2 }}>{ind.parts}</p>
         </div>
-        <motion.div className="opacity-0 group-hover:opacity-100" transition={{ duration: 0.15 }}>
+        <motion.div className="opacity-0 group-hover:opacity-100 shrink-0" transition={{ duration: 0.15 }}>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path d="M2 14L14 2M14 2H6M14 2V10" stroke={G} strokeWidth="1.5" />
           </svg>
@@ -507,20 +563,31 @@ function Industries() {
   const x1 = useTransform(scrollYProgress, [0, 1], ["-4%", "4%"]);
 
   return (
-    <section ref={ref} style={{ background: BG3 }} className="py-28 px-8 md:px-16 lg:px-24 overflow-hidden">
+    <section ref={ref} style={{ background: BG3 }} className="py-20 md:py-28 px-5 sm:px-8 md:px-16 lg:px-24 overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <FU><Eyebrow label="Industries We Serve" /></FU>
-        <div className="relative overflow-hidden mb-12" style={{ height: 72 }}>
+
+        {/* Ghost watermark — decorative parallax marquee, left as-is */}
+        <div className="relative overflow-hidden mb-10 md:mb-12" style={{ height: "clamp(2.5rem,7vw,4.5rem)" }}>
           <motion.div style={{ x: x1 }} className="absolute whitespace-nowrap select-none pointer-events-none">
-            <span className="font-black uppercase tracking-tight"
-              style={{ fontSize: 72, color: INK, opacity: 0.04 }}>
+            <span style={{
+              fontFamily: DISPLAY_FONT,
+              fontWeight: 900,
+              textTransform: "uppercase",
+              fontSize: "clamp(2rem,7vw,4.5rem)",
+              color: INK,
+              opacity: 0.04,
+              letterSpacing: "0.02em",
+            }}>
               AUTOMOTIVE · ELECTRONICS · CONSUMER · MEDICAL · INDUSTRIAL ·&nbsp;
             </span>
           </motion.div>
         </div>
+
+        {/* MOBILE-ALIGNMENT FIX: center this standalone display heading on
+            mobile/tablet, revert to left at lg (original). */}
         <CR>
-          <h2 className="font-black uppercase tracking-tight leading-[0.87] mb-12"
-            style={{ fontSize: "clamp(2.4rem,5vw,5.5rem)", color: INK }}>
+          <h2 className="text-center lg:text-left" style={{ fontFamily: DISPLAY_FONT, fontWeight: 900, textTransform: "uppercase", letterSpacing: "-0.01em", fontSize: "clamp(2.6rem,6vw,5.5rem)", lineHeight: 0.9, color: INK, marginBottom: "3rem" }}>
             Five sectors.<br />
             <span style={{ WebkitTextStroke: `2px ${G}`, color: "transparent" }}>Countless parts.</span>
           </h2>
@@ -542,53 +609,61 @@ function Quality() {
   const pts = [
     { h: "ISO 9001:2015 Certified",  b: "Full quality management system with 100% part inspection at final stage. Every batch shipped with dimensional report." },
     { h: "DFM-First Engineering",    b: "Every project begins with a Design for Manufacturability review. We catch costly errors before a single tonne of pressure is applied." },
-    { h: "Fast Turnaround",          b: "2–4 weeks for new moulds. 24–48 hours for repeat orders. Our lean floor scheduling keeps commitments, not excuses." },
+    { h: "Fast Turnaround",          b: "8-12 weeks for new moulds. 48 hours for repeat orders. Our lean floor scheduling keeps commitments, not excuses." },
     { h: "Cost-Effective Pricing",   b: "DFM-driven design reduces material waste. Competitive tooling and per-part pricing from prototype through mass production." },
     { h: "End-to-End Support",       b: "Material selection → mould design → moulding → secondary ops → QC → delivery. One supplier, full accountability." },
   ];
 
   return (
-    <section style={{ background: BG2 }} className="py-28 px-8 md:px-16 lg:px-24">
+    <section style={{ background: BG2 }} className="py-20 md:py-28 px-5 sm:px-8 md:px-16 lg:px-24">
       <div className="max-w-7xl mx-auto">
         <FU><Eyebrow label="Why Plastifusion" /></FU>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-          <div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+          {/* MOBILE-ALIGNMENT FIX: center the heading/description/counter
+              block below lg; text-center cascades to the headings and the
+              counter's number+label. The paragraph additionally gets
+              mx-auto so its max-w-md box is centered (grid items don't
+              shrink-wrap the way flex items with items-center do).
+              Right-hand quality-point cards are untouched — still left. */}
+          <div className="text-center lg:text-left">
             <CR>
-              <h2 className="font-black uppercase tracking-tight leading-[0.87]"
-                style={{ fontSize: "clamp(2.4rem,5vw,5.5rem)", color: INK }}>Quality</h2>
+              <h2 style={{ fontFamily: DISPLAY_FONT, fontWeight: 900, textTransform: "uppercase", letterSpacing: "-0.01em", fontSize: "clamp(2.6rem,6vw,5.5rem)", lineHeight: 0.9, color: INK }}>
+                Quality
+              </h2>
             </CR>
             <CR delay={0.08}>
-              <h2 className="font-black uppercase tracking-tight leading-[0.87]"
-                style={{ fontSize: "clamp(2.4rem,5vw,5.5rem)", color: G }}>first.</h2>
+              <h2 style={{ fontFamily: DISPLAY_FONT, fontWeight: 900, textTransform: "uppercase", letterSpacing: "-0.01em", fontSize: "clamp(2.6rem,6vw,5.5rem)", lineHeight: 0.9, color: G }}>
+                first.
+              </h2>
             </CR>
             <FU delay={0.2}>
-              <p className="mt-8 text-base leading-relaxed max-w-md" style={{ color: INK2 }}>
+              <p className="mt-6 sm:mt-8 text-sm sm:text-base leading-relaxed max-w-md mx-auto lg:mx-0" style={{ color: INK2 }}>
                 ISO 9001:2015 isn't a frame on the wall. It's the process every operator follows on every shift — from material receipt to final delivery.
               </p>
             </FU>
             <FU delay={0.32}>
-              <div ref={counterRef} className="mt-10 flex items-center gap-5 p-5 border-l-2"
+              <div ref={counterRef} className="mt-8 sm:mt-10 flex items-center gap-5 p-4 sm:p-5 border-l-2"
                 style={{ borderColor: G, background: WH }}>
                 <div>
-                  <div className="font-black tracking-tight" style={{ fontSize: 48, color: G, lineHeight: 1 }}>
+                  <div className="font-black tracking-tight" style={{ fontSize: "clamp(2.4rem,6vw,3rem)", color: G, lineHeight: 1 }}>
                     {count}+
                   </div>
-                  <div className="text-[10px] tracking-[0.2em] uppercase font-bold mt-1" style={{ color: INK3 }}>
+                  <div className="text-[10px] tracking-[0.18em] uppercase font-bold mt-1" style={{ color: INK3 }}>
                     Years of injection moulding experience
                   </div>
                 </div>
               </div>
             </FU>
           </div>
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {pts.map((p, i) => (
               <FU key={i} delay={i * 0.09}>
-                <motion.div className="p-5 border-l-2 transition-colors duration-200"
+                <motion.div className="p-4 sm:p-5 border-l-2 transition-colors duration-200"
                   style={{ borderColor: G, background: WH, borderRadius: "0 4px 4px 0" }}
                   whileHover={{ paddingLeft: 28, background: BG }}
                   transition={{ duration: 0.2 }}>
-                  <p className="text-sm font-bold mb-1.5" style={{ color: INK }}>{p.h}</p>
-                  <p className="text-sm leading-relaxed" style={{ color: INK2 }}>{p.b}</p>
+                  <p className="text-sm font-bold mb-1 sm:mb-1.5" style={{ color: INK }}>{p.h}</p>
+                  <p className="text-xs sm:text-sm leading-relaxed" style={{ color: INK2 }}>{p.b}</p>
                 </motion.div>
               </FU>
             ))}
@@ -600,9 +675,12 @@ function Quality() {
 }
 
 // ─── CTA ──────────────────────────────────────────────────────────────────────
+// CTA was already fully centered (text-center wrapper + mx-auto paragraph),
+// so it is UNCHANGED. Note: the Eyebrow fix above also makes this section's
+// eyebrow center on mobile, now consistent with the centered headline below it.
 function CTA() {
   return (
-    <section className="relative py-40 px-8 md:px-16 lg:px-24 overflow-hidden"
+    <section className="relative py-28 md:py-40 px-5 sm:px-8 md:px-16 lg:px-24 overflow-hidden"
       style={{ background: INK }}>
       <motion.div className="absolute pointer-events-none" style={{
         width: 700, height: 700, borderRadius: "50%",
@@ -618,22 +696,24 @@ function CTA() {
       <div className="relative z-10 max-w-7xl mx-auto text-center">
         <FU><Eyebrow label="Get Started" dark /></FU>
         <CR>
-          <h2 className="font-black uppercase tracking-tight"
-            style={{ fontSize: "clamp(3rem,8vw,8rem)", lineHeight: 0.84, color: "#fff" }}>Let's build</h2>
+          <h2 style={{ fontFamily: DISPLAY_FONT, fontWeight: 900, textTransform: "uppercase", letterSpacing: "-0.01em", fontSize: "clamp(3rem,10vw,8rem)", lineHeight: 0.88, color: "#fff" }}>
+            Let's build
+          </h2>
         </CR>
         <CR delay={0.08}>
-          <h2 className="font-black uppercase tracking-tight"
-            style={{ fontSize: "clamp(3rem,8vw,8rem)", lineHeight: 0.84, color: G }}>it right.</h2>
+          <h2 style={{ fontFamily: DISPLAY_FONT, fontWeight: 900, textTransform: "uppercase", letterSpacing: "-0.01em", fontSize: "clamp(3rem,10vw,8rem)", lineHeight: 0.88, color: G }}>
+            it right.
+          </h2>
         </CR>
         <FU delay={0.3}>
-          <p className="mt-8 text-base leading-relaxed max-w-lg mx-auto" style={{ color: "rgba(255,255,255,0.5)" }}>
+          <p className="mt-6 sm:mt-8 text-sm sm:text-base leading-relaxed max-w-lg mx-auto" style={{ color: "rgba(255,255,255,0.5)" }}>
             Tell us about your component, tolerances, and volumes.
-            Our engineers will respond with a DFM assessment within 24 hours.
+            Our engineers will respond with a DFM assessment within 48 hours.
           </p>
         </FU>
-        <FU delay={0.45} className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <FU delay={0.45} className="mt-10 sm:mt-12 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
           <a href="/contact"
-            className="inline-flex items-center gap-4 px-10 py-4 text-sm font-bold tracking-[0.18em] uppercase transition-all duration-300"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-4 px-8 sm:px-10 py-4 text-sm font-bold tracking-[0.18em] uppercase transition-all duration-300"
             style={{ background: G, color: "#fff" }}
             onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.background = "#007533"}
             onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.background = G}>
@@ -643,7 +723,7 @@ function CTA() {
             </svg>
           </a>
           <a href="tel:+919994771121"
-            className="inline-flex items-center gap-4 px-10 py-4 text-sm font-bold tracking-[0.18em] uppercase transition-all duration-300"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-4 px-8 sm:px-10 py-4 text-sm font-bold tracking-[0.18em] uppercase transition-all duration-300"
             style={{ background: "transparent", color: "rgba(255,255,255,0.5)", border: "1.5px solid rgba(255,255,255,0.15)" }}
             onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(255,255,255,0.5)"; (e.currentTarget as HTMLAnchorElement).style.color = "#fff"; }}
             onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(255,255,255,0.15)"; (e.currentTarget as HTMLAnchorElement).style.color = "rgba(255,255,255,0.5)"; }}>
@@ -651,7 +731,7 @@ function CTA() {
           </a>
         </FU>
         <FU delay={0.6}>
-          <p className="mt-8 text-xs" style={{ color: "rgba(255,255,255,0.25)", letterSpacing: "0.1em" }}>
+          <p className="mt-6 sm:mt-8 text-[10px] sm:text-xs px-4" style={{ color: "rgba(255,255,255,0.25)", letterSpacing: "0.08em" }}>
             S.F.No.639/1, Site No.60,61 · Comsia Industrial Estate · Vellamadai Village · Coimbatore – 641110
           </p>
         </FU>

@@ -28,7 +28,7 @@ const features = [
     index: "02",
     title: "Fast Turnaround",
     description:
-      "2–4 weeks for new moulds and 24–48 hours for repeat production orders — no compromise on speed.",
+      "8-12 weeks for new moulds and 48 hours for repeat production orders — no compromise on speed.",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
         <circle cx="12" cy="12" r="10" />

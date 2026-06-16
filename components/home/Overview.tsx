@@ -15,17 +15,17 @@ import { useRef, useEffect, useState } from "react";
 /* ─── Data ─────────────────────────────────────────────── */
 
 const stats = [
-  { number: 20,  suffix: "+", label: "Years of Excellence",   note: "Est. 2004" },
+  { number: 20,  suffix: "+", label: "Years of Excellence",   note: "Est. 2026" },
   { number: 160, suffix: "T", label: "Injection Capacity",    note: "120T–160T Range" },
   { number: 50,  suffix: "K", label: "Parts Per Month",       note: "High-volume ready" },
   { number: 98,  suffix: "%", label: "On-Time Delivery",      note: "ISO 9001:2015" },
 ];
 
 const capabilities = [
-  { icon: Gauge,      label: "Ultra Precision",     sub: "±0.05mm tolerance" },
+  { icon: Gauge,      label: "Ultra Precision",     sub: "±0.5mm tolerance" },
   { icon: Zap,        label: "Advanced Machinery",  sub: "120T–160T press force" },
   { icon: ShieldCheck,label: "Certified Quality",   sub: "ISO · RoHS · REACH" },
-  { icon: Clock,      label: "Fast Turnaround",     sub: "24–48hr repeat cycle" },
+  { icon: Clock,      label: "Fast Turnaround",     sub: "48hr repeat cycle" },
 ];
 
 /* ─── Animated Counter ──────────────────────────────────── */
@@ -264,7 +264,7 @@ export default function Overview() {
           className="absolute z-20 bottom-8 left-8 md:left-16"
         >
           <p className="text-[clamp(2.5rem,7vw,5.5rem)] font-black leading-none tracking-tight text-[#00b050]">
-            ±0.05<span className="text-white/50 font-light text-[0.5em]">mm</span>
+            ±0.5<span className="text-white/50 font-light text-[0.5em]">mm</span>
           </p>
           <p className="text-xs tracking-[3px] uppercase text-zinc-500 mt-1">Tolerance on critical dims</p>
         </motion.div>
@@ -277,7 +277,7 @@ export default function Overview() {
             className="flex gap-12 whitespace-nowrap"
           >
             {Array(4).fill(null).map((_, i) =>
-              ["INJECTION MOULDING", "±0.05MM TOLERANCE", "ISO 9001:2015", "20+ YEARS", "COIMBATORE", "HIGH VOLUME PRODUCTION", "RoHS COMPLIANT", "REACH CERTIFIED"].map((t, j) => (
+              ["INJECTION MOULDING", "±0.5MM TOLERANCE", "ISO 9001:2015", "20+ YEARS", "COIMBATORE", "HIGH VOLUME PRODUCTION", "RoHS COMPLIANT", "REACH CERTIFIED"].map((t, j) => (
                 <span key={`${i}-${j}`} className="text-[11px] font-semibold tracking-[3px] text-zinc-600">
                   {t}
                   <span className="ml-12 text-[#006B2D]">✦</span>

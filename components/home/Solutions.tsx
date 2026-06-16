@@ -141,7 +141,7 @@ export default function SolutionsIndustries() {
             <div className="mt-12 grid grid-cols-2 gap-6 border-t border-green-100 pt-10">
               {[
                 { value: "500+", label: "Projects Delivered" },
-                { value: "15+", label: "Years Experience" },
+                { value: "20+", label: "Years Experience" },
                 { value: "99%", label: "On-Time Delivery" },
                 { value: "5", label: "Industries Served" },
               ].map((stat) => (

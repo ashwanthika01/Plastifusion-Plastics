@@ -257,10 +257,9 @@ function MorphBlob({ mouseX, mouseY }: { mouseX: number; mouseY: number }) {
 
 function MarqueeTicker() {
   const items = [
-    "ISO Precision ±0.01mm",
+    "ISO Precision ±0.5mm",
     "Injection Moulding",
-    "Blow Moulding",
-    "24hr Quote Turnaround",
+    "48hr Quote Turnaround",
     "DFM Feedback Free",
     "Prototype to Production",
     "PP · ABS · HDPE · Nylon",
@@ -365,9 +364,9 @@ function TiltCard({
 
 function StatsStrip() {
   const stats = [
-    { icon: Clock, value: 24, suffix: "hr", label: "Quote turnaround" },
+    { icon: Clock, value: 48, suffix: "hr", label: "Quote turnaround" },
     { icon: Zap, value: 500, suffix: "+", label: "Components delivered" },
-    { icon: Shield, value: 15, suffix: "yr", label: "Industry experience" },
+    { icon: Shield, value: 20, suffix: "yr", label: "Industry experience" },
   ];
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-px" style={{ background: C.ruleGreen }}>
@@ -550,7 +549,7 @@ function HeroContact() {
               }}
               className="max-w-full"
             >
-              <Typewriter text="Share your requirements and our engineering team will respond with a detailed quote within 24 hours." />
+              <Typewriter text="Share your requirements and our engineering team will respond with a detailed quote within 48 hours." />
             </motion.p>
 
             {/* Promise list */}
@@ -564,7 +563,7 @@ function HeroContact() {
               }}
             >
               {[
-                "Quote turnaround within 24 hours",
+                "Quote turnaround within 48 hours",
                 "DFM feedback included at no charge",
                 "Prototype-to-production under one roof",
               ].map((t, i) => (
@@ -684,7 +683,7 @@ function HeroContact() {
                       Request sent.
                     </div>
                     <div style={{ fontSize: 13, color: C.steel, maxWidth: 260 }}>
-                      We've received your message and will respond within 24 hours.
+                      We've received your message and will respond within 48 hours.
                     </div>
                   </motion.div>
                   <motion.button
@@ -867,7 +866,7 @@ function HeroContact() {
                   </motion.button>
 
                   <p style={{ fontSize: 11, textAlign: "center", color: C.steelLight, marginTop: 2 }}>
-                    We typically respond within 24 hours on business days.
+                    We typically respond within 48 hours on business days.
                   </p>
                 </motion.form>
               )}

@@ -157,7 +157,7 @@ const certs = [
   { code: "ISO", full: "9001:2015", desc: "Quality Management Systems" },
   { code: "RoHS", full: "2011/65/EU", desc: "Hazardous Substances Directive" },
   { code: "REACH", full: "1907/2006", desc: "Chemical Safety Regulation" },
-  { code: "±0.05", full: "mm", desc: "Critical Dimension Tolerance" },
+  { code: "±0.5", full: "mm", desc: "Critical Dimension Tolerance" },
   { code: "100%", full: "Inspection", desc: "Zero-Skip Audit Process" },
 ];
 
@@ -368,7 +368,7 @@ export default function InfrastructureAndCTA() {
                   className="absolute -right-6 top-1/3 bg-white/95 backdrop-blur-xl rounded-3xl p-5 shadow-xl border border-stone-100 flex gap-4"
                 >
                   <Dial label="Press Force" value="160T" />
-                  <Dial label="Tolerance" value="±0.05" />
+                  <Dial label="Tolerance" value="±0.5" />
                 </motion.div>
               </div>
 

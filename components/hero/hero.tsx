@@ -24,17 +24,17 @@ import { useRef, useEffect, useState, useCallback } from "react";
 /* ─── DATA ─────────────────────────────────────────────── */
 const TICKER_ITEMS = [
   "ISO 9001:2015 Certified",
-  "±0.05mm Precision",
+  "±0.5mm Precision",
   "120–160 Tonne Machines",
-  "24–48 Hour Repeat Delivery",
+  "48 Hour Repeat Delivery",
   "20+ Years Excellence",
   "RoHS & REACH Compliant",
   "Global Export Partner",
 ];
 
 const STATS = [
-  { value: "±0.05mm", label: "Tolerance" },
-  { value: "24–48h", label: "Repeat Order" },
+  { value: "±0.5mm", label: "Tolerance" },
+  { value: "48h", label: "Repeat Order" },
   { value: "20+", label: "Years Mastery" },
 ];
 
@@ -216,7 +216,7 @@ function FactoryTourModal({ onClose }: { onClose: () => void }) {
               Request Sent!
             </h3>
             <p style={{ fontSize: 14, color: "#5A7A68", lineHeight: 1.6, maxWidth: 320, margin: "0 auto 24px" }}>
-              Our team will reach out within 24 hours to confirm your factory
+              Our team will reach out within 48 hours to confirm your factory
               tour video call. We look forward to meeting you.
             </p>
             <button
@@ -271,7 +271,7 @@ function FactoryTourModal({ onClose }: { onClose: () => void }) {
                     name="name"
                     value={form.name}
                     onChange={handleChange}
-                    placeholder="Arun Kumar"
+                    placeholder="Enter your name"
                     required
                     style={inputStyle}
                   />
@@ -282,7 +282,7 @@ function FactoryTourModal({ onClose }: { onClose: () => void }) {
                     name="company"
                     value={form.company}
                     onChange={handleChange}
-                    placeholder="Acme Industries"
+                    placeholder="Enter your company name"
                     style={inputStyle}
                   />
                 </div>
@@ -296,7 +296,7 @@ function FactoryTourModal({ onClose }: { onClose: () => void }) {
                   type="email"
                   value={form.email}
                   onChange={handleChange}
-                  placeholder="arun@company.com"
+                  placeholder="Enter your email address"
                   required
                   style={inputStyle}
                 />
@@ -311,7 +311,7 @@ function FactoryTourModal({ onClose }: { onClose: () => void }) {
                     type="tel"
                     value={form.phone}
                     onChange={handleChange}
-                    placeholder="+91 98765 43210"
+                    placeholder="Enter your phone number"
                     style={inputStyle}
                   />
                 </div>
@@ -384,7 +384,7 @@ function FactoryTourModal({ onClose }: { onClose: () => void }) {
               </motion.button>
 
               <p style={{ fontSize: 11.5, color: "#8AA898", textAlign: "center", margin: 0, lineHeight: 1.5 }}>
-                We typically respond within 24 hours. No spam, ever.
+                We typically respond within 48 hours. No spam, ever.
               </p>
             </div>
           </>

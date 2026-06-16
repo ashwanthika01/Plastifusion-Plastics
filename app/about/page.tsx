@@ -210,9 +210,9 @@ function ScanLine() {
 const TICKS = [
   "Innovation in Every Mold",
   "ISO 9001:2015 Certified",
-  "±0.05mm Precision",
+  "±0.5mm Precision",
   "120T – 160T Capacity",
-  "24–48hr Repeat Delivery",
+  "48hr Repeat Delivery",
   "Coimbatore, India",
   "Est. 2026",
 ];
@@ -430,9 +430,9 @@ function Timeline() {
 // ─── CAPABILITIES GRID ────────────────────────────────────────────────────────
 const CAPS = [
   { label: "Tonnage", val: "120T – 160T", sub: "Injection moulding machines" },
-  { label: "Tolerance", val: "±0.05mm", sub: "Critical dimensions" },
-  { label: "Lead Time", val: "2–4 wks", sub: "New mould production" },
-  { label: "Repeat", val: "24–48 hrs", sub: "Repeat order turnaround" },
+  { label: "Tolerance", val: "±0.5mm", sub: "Critical dimensions" },
+  { label: "Lead Time", val: "8-12 wks", sub: "New mould production" },
+  { label: "Repeat", val: "48 hrs", sub: "Repeat order turnaround" },
   { label: "Inspection", val: "100%", sub: "Every part, every time" },
   { label: "Volumes", val: "1 → ∞", sub: "Prototype to mass production" },
 ];
@@ -600,7 +600,7 @@ export default function AboutPage() {
             <div>
               <CR><h2 className="text-[clamp(3.5rem,8vw,8rem)] font-black leading-[0.82] tracking-tight uppercase text-white">Let's build</h2></CR>
               <CR delay={0.08}><h2 className="text-[clamp(3.5rem,8vw,8rem)] font-black leading-[0.82] tracking-tight uppercase" style={{ color: G }}>it right.</h2></CR>
-              <FU delay={0.3}><p className="mt-6 max-w-md text-base leading-relaxed" style={{ color: "rgba(255,255,255,0.4)" }}>Tell us about your component, your tolerances, your volumes. Our engineers will get back with a DFM assessment within 24 hours.</p></FU>
+              <FU delay={0.3}><p className="mt-6 max-w-md text-base leading-relaxed" style={{ color: "rgba(255,255,255,0.4)" }}>Tell us about your component, your tolerances, your volumes. Our engineers will get back with a DFM assessment within 48 hours.</p></FU>
             </div>
             <FU delay={0.2} className="flex flex-col gap-4 shrink-0">
               <a href="/contact" className="inline-flex items-center gap-5 px-10 py-5 text-sm font-bold tracking-[0.15em] uppercase transition-all duration-300" style={{ background: G, color: "#fff", border: `1.5px solid ${G}` }} onMouseEnter={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = G; }} onMouseLeave={e => { e.currentTarget.style.background = G; e.currentTarget.style.color = "#fff"; }}>
