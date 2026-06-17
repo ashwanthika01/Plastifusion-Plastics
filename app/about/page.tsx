@@ -229,7 +229,7 @@ function Ticker({ dark = true, reverse = false }) {
     >
       <motion.div
         className="flex gap-14 whitespace-nowrap"
-        animate={{ x: reverse ? ["-50%", "0%"] : ["0%", "-50%"] }}
+        animate={{ x: reverse ? [-1200,0] : [0, -1200] }}
         transition={{ duration: 28, ease: "linear", repeat: Infinity }}
       >
         {doubled.map((t, i) => (

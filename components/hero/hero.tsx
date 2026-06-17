@@ -571,24 +571,35 @@ export default function Hero() {
         style={{ fontFamily: "'DM Sans', system-ui, sans-serif" }}
       >
         {/* Ticker */}
-        <div className="relative z-30 shrink-0 bg-gradient-to-r from-[#005a25] to-[#007a38] py-2.5 text-white">
-          <motion.div
-            className="flex whitespace-nowrap"
-            animate={{ x: ["0%", "-50%"] }}
-            transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
+        <div className="relative z-30 shrink-0 overflow-hidden bg-gradient-to-r from-[#005a25] to-[#007a38] py-2.5 text-white">
+      <motion.div
+        className="flex whitespace-nowrap will-change-transform"
+        animate={{ x: [0, -1200] }}
+        transition={{
+          duration: 15,
+          repeat: Infinity,
+          ease: "linear",
+        }}
+      >
+        {[...TICKER_ITEMS, ...TICKER_ITEMS].map((item, i) => (
+          <span
+            key={i}
+            className="
+              inline-flex items-center
+              gap-2 md:gap-4
+              px-4 md:px-8
+              text-[10px] md:text-xs
+              font-medium
+              tracking-[1px] md:tracking-[1.5px]
+              uppercase
+            "
           >
-            {[...TICKER_ITEMS, ...TICKER_ITEMS].map((item, i) => (
-              <span
-                key={i}
-                className="inline-flex items-center gap-4 px-8 text-xs font-medium tracking-[1.5px]"
-              >
-                {item}
-                <span className="text-green-300/40">•</span>
-              </span>
-            ))}
-          </motion.div>
-        </div>
-
+            {item}
+            <span className="text-green-300/40">•</span>
+          </span>
+        ))}
+      </motion.div>
+    </div>
         {/* Main Content */}
         <div
           className="relative z-20 flex flex-col lg:grid min-h-0 flex-1"

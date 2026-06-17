@@ -272,7 +272,7 @@ export default function Overview() {
         {/* Scrolling text ticker at bottom of image */}
         <div className="absolute z-20 bottom-0 left-0 right-0 overflow-hidden border-t border-white/5 py-2 bg-[#080c09]/40 backdrop-blur-sm">
           <motion.div
-            animate={{ x: ["0%", "-50%"] }}
+            animate={{ x: [0, -1200] }}
             transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
             className="flex gap-12 whitespace-nowrap"
           >
