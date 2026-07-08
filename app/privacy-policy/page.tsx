@@ -264,7 +264,12 @@ const SECTIONS: PolicySection[] = [
           at{" "}
           <a href="mailto:plastifusion2026@gmail.com" style={{ color: C.green, textDecoration: "none", fontWeight: 500 }}>
             plastifusion2026@gmail.com
-          </a>{" "}
+          </a> or
+          {" "}
+          <a href="mailto:yokesh@plastifusionplastics.com" style={{ color: C.green, textDecoration: "none", fontWeight: 500 }}>
+            yokesh@plastifusionplastics.com
+          </a>
+          {" "}
           if you have concerns about a specific transmission.
         </p>
       </>
@@ -351,6 +356,9 @@ const SECTIONS: PolicySection[] = [
           To exercise any of these rights, contact us at{" "}
           <a href="mailto:plastifusion2026@gmail.com" style={{ color: C.green, textDecoration: "none", fontWeight: 500 }}>
             plastifusion2026@gmail.com
+          </a> or{" "}
+          <a href="mailto:yokesh@plastifusionplastics.com" style={{ color: C.green, textDecoration: "none", fontWeight: 500 }}>
+            yokesh@plastifusionplastics.com
           </a>
           . We will respond within a reasonable timeframe, typically within
           30 days.
@@ -453,6 +461,11 @@ const SECTIONS: PolicySection[] = [
               <Mail size={12} />
               plastifusion2026@gmail.com
             </a>
+            <a href="mailto:yokesh@plastifusionplastics.com" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: C.green, textDecoration: "none", display: "flex", alignItems: "center", gap: 6 }}>
+              <Mail size={12} />
+              yokesh@plastifusionplastics.com
+            </a>
+
             <a href="tel:+919488202023" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: C.green, textDecoration: "none" }}>
               +91 94882 02023        
             </a>

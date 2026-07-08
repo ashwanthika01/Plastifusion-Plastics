@@ -346,6 +346,9 @@ function FactoryTourModal({ onClose }: { onClose: () => void }) {
                   Something went wrong. Please try again or email us directly at{" "}
                   <a href="mailto:plastifusion2026@gmail.com" style={{ color: "#006B2D" }}>
                     plastifusion2026@gmail.com
+                  </a> or{" "}
+                  <a href="mailto:yokesh@plastifusionplastics.com" style={{ color: "#006B2D" }}>
+                    yokesh@plastifusionplastics.com
                   </a>
                 </p>
               )}
@@ -617,7 +620,7 @@ export default function Hero() {
               >
                 <div className="h-2 w-2 animate-pulse rounded-full bg-[#006B2D]" />
                 <span className="text-xs font-semibold uppercase tracking-widest text-[#006B2D]">
-                  Precision Engineering Since 2026
+                  Precision Engineering 
                 </span>
               </motion.div>
 

@@ -388,6 +388,15 @@ export default function Footer() {
                     },
                   },
                   {
+                    icon: Mail,
+                    label: "Email",
+                    value: "yokesh@plastifusionplastics.com",
+                    onClick: () => {
+                      window.location.href =
+                        "mailto:yokesh@plastifusionplastics.com";
+                    },
+                  },
+                  {
                     icon: Globe,
                     label: "Website",
                     value: "www.plastifusionplastics.com",
@@ -441,7 +450,7 @@ export default function Footer() {
           {/* ── BOTTOM BAR ─────────────────────────────── */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-6 text-xs text-stone-600">
             <p>
-              © 2026 Plastifusion Plastics Pvt. Ltd. All rights reserved. ·{" "}
+              © Plastifusion Plastics Pvt. Ltd. All rights reserved. ·{" "}
               <span className="text-[#006B2D] hover:text-[#00b050] transition-colors cursor-pointer font-semibold">
                 Designed by Ashwanthika Govindaraja
               </span>

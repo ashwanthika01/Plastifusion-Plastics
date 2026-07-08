@@ -4,6 +4,7 @@ import Solutions from "@/components/home/Solutions";
 import WhyChooseUs from "@/components/home/WhyChooseUs";
 import Infrastructure from "@/components/home/Infrastructure";
 import CTA from "@/components/home/CTA";
+import FAQ from "@/components/home/faq";
 
 export default function HomePage() {
   return (
@@ -13,6 +14,7 @@ export default function HomePage() {
       <Solutions />
       <WhyChooseUs />
       <Infrastructure />
+      <FAQ />
       <CTA />
     </main>
   );

@@ -647,6 +647,7 @@ function HeroContact() {
                 </div>
                 <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: C.steelLight }}>
                   plastifusion2026@gmail.com
+                  yokesh@plastifusionplastics.com
                 </div>
               </div>
             </div>
@@ -806,7 +807,7 @@ function HeroContact() {
                         }}
                       >
                         <AlertCircle size={14} />
-                        Failed to send. Email us at plastifusion2026@gmail.com
+                        Failed to send. Email us at yokesh@plastifusionplastics.com or plastifusion2026@gmail.com
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -999,7 +1000,8 @@ function DetailsRail() {
     {
       icon: Mail,
       label: "Email",
-      value: "plastifusion2026@gmail.com",
+      value1: "yokesh@plastifusionplastics.com",
+      value2:"plastifusion2026@gmail.com",
       sub: "Quotes, drawings & general enquiries",
       href: "mailto:plastifusion2026@gmail.com",
     },
@@ -1028,7 +1030,7 @@ function DetailsRail() {
           {details.map((d, i) => (
             <FadeUp key={i} delay={i * 0.1}>
               <TiltCard>
-                <motion.a
+                <motion.div
                   href={d.href}
                   target={d.href.startsWith("http") ? "_blank" : undefined}
                   rel="noopener noreferrer"
@@ -1061,7 +1063,25 @@ function DetailsRail() {
                       {d.label}
                     </div>
                     <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, color: C.ink, marginBottom: 6, lineHeight: 1.35 }}>
-                      {d.value}
+                      {d.label === "Email" ? (
+  <>
+    <a
+      href={`mailto:${d.value1}`}
+      style={{ display: "block", color: C.ink, textDecoration: "none" }}
+    >
+      {d.value1}
+    </a>
+
+    <a
+      href={`mailto:${d.value2}`}
+      style={{ display: "block", color: C.ink, textDecoration: "none" }}
+    >
+      {d.value2}
+    </a>
+  </>
+) : (
+  d.value
+)}
                     </div>
                     <div style={{ fontSize: 12, color: C.steelLight, lineHeight: 1.6 }}>
                       {d.sub}
@@ -1071,7 +1091,7 @@ function DetailsRail() {
                     <ChevronRight size={13} />
                     Open
                   </div>
-                </motion.a>
+                </motion.div>
               </TiltCard>
             </FadeUp>
           ))}

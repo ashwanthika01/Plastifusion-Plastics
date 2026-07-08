@@ -486,7 +486,11 @@ const SECTIONS: TCSection[] = [
           at{" "}
           <a href="mailto:plastifusion2026@gmail.com" style={{ color: C.green, textDecoration: "none", fontWeight: 500 }}>
             plastifusion2026@gmail.com
-          </a>{" "}
+          </a> or {" "}
+          <a href="mailto:yokesh@plastifusionplastics.com" style={{ color: C.green, textDecoration: "none", fontWeight: 500 }}>
+            yokesh@plastifusionplastics.com
+          </a>
+          {" "}
           before proceeding.
         </p>
       </>

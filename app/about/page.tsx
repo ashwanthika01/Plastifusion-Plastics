@@ -503,7 +503,7 @@ function Materials() {
 export default function AboutPage() {
   const directors = [
     { name: "T. Rajeshwara Kumar", degree: "M.B.A", role: "Director", tagline: "Precision is not a target — it is our floor.", bio: "Rajeshwara Kumar co-founded Plastifusion with a vision for precision-first plastic manufacturing in Coimbatore. His MBA background combined with deep knowledge of injection moulding economics and client operations drives the company's strategic direction and client relationships.", phone1: "+91 94882 02023", phone2: "+91 63817 33925", email: "plastifusion2026@gmail.com", number: 0, image: "/Rajeshawara.jpeg"},
-    { name: "Yokesh R", degree: "", role: "Director", tagline: "Quality in the mould means zero problems at delivery.", bio: "Yokesh R brings rigorous operational and technical discipline to Plastifusion's day-to-day manufacturing. Overseeing the toolroom, production floor, and quality control processes, he ensures every component leaving the facility meets the exact specification it was designed to.", phone1: "+91 99947 71121", phone2: "+91 94437 33121", email: "plastifusion2026@gmail.com", number: 1, image: "/Yokesh R.jpeg"},
+    { name: "Yokesh R", degree: "", role: "Director", tagline: "Quality in the mould means zero problems at delivery.", bio: "Yokesh R brings rigorous operational and technical discipline to Plastifusion's day-to-day manufacturing. Overseeing the toolroom, production floor, and quality control processes, he ensures every component leaving the facility meets the exact specification it was designed to.", phone1: "+91 99947 71121", phone2: "+91 94437 33121", email: "yokesh@plastifusionplastics.com", number: 1, image: "/Yokesh R.jpeg"},
   ];
 
   return (
