@@ -4,7 +4,20 @@ import { useRef, useState, type ReactNode } from "react";
 import { motion, useScroll, useTransform, useInView, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { Hero } from "./Hero";
+import type { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: "About Us",
+
+  description:
+    "Learn about Plastifusion Plastics, our journey, manufacturing expertise, quality standards and commitment to delivering precision plastic solutions.",
+
+  keywords: [
+    "About Plastifusion Plastics",
+    "Plastic Manufacturing Company",
+    "Injection Moulding Experts",
+  ],
+};
 // ─── TOKENS ───────────────────────────────────────────────────────────────────
 const G = "#00b050";
 const GD = "#006B2D";

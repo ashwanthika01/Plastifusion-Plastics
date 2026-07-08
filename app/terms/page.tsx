@@ -7,6 +7,14 @@ import {
   Globe, Copyright, Ban, RefreshCw, Mail, ChevronRight,
   ArrowUpRight, Hammer,
 } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Terms and Conditions",
+
+  description:
+    "Read the Terms and Conditions governing the use of Plastifusion Plastics website and services.",
+};
 
 // ─── Design tokens — exact match to established system ────────────────────────
 const C = {

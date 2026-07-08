@@ -13,6 +13,20 @@ import {
   Phone, Mail, MapPin, Globe, ArrowRight, CheckCircle2,
   AlertCircle, Send, ChevronRight, Zap, Clock, Shield,
 } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Contact Us",
+
+  description:
+    "Contact Plastifusion Plastics for plastic injection moulding solutions, project inquiries and manufacturing partnerships.",
+
+  keywords: [
+    "Contact Plastifusion Plastics",
+    "Plastic Manufacturer Contact",
+    "Injection Moulding Inquiry",
+  ],
+};
 
 const C = {
   pageBg: "#F4F8F5",
@@ -1091,7 +1105,7 @@ function DetailsRail() {
                     <ChevronRight size={13} />
                     Open
                   </div>
-                </motion.div>
+              </motion.a>
               </TiltCard>
             </FadeUp>
           ))}

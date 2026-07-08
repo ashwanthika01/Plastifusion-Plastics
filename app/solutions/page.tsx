@@ -2,6 +2,21 @@
 
 import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform, useInView, AnimatePresence } from "framer-motion";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Plastic Injection Moulding Solutions",
+
+  description:
+    "Explore our plastic injection moulding solutions, custom manufacturing capabilities, precision moulding services and engineered plastic products.",
+
+  keywords: [
+    "Plastic Solutions",
+    "Custom Plastic Components",
+    "Injection Moulding Services",
+    "Engineering Plastic Products",
+  ],
+};
 
 const G   = "#00903F";
 const GL  = "#00b050";

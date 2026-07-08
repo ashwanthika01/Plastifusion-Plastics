@@ -16,6 +16,21 @@ import {
   BadgeCheck, ArrowRight, ChevronRight, Activity, Target, LayoutGrid,
   Repeat2, DollarSign, HardDrive, Box, Microscope,
 } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Manufacturing Infrastructure",
+
+  description:
+    "Discover Plastifusion Plastics' advanced manufacturing infrastructure, modern machinery, quality control systems and production capabilities.",
+
+  keywords: [
+    "Plastic Manufacturing Infrastructure",
+    "Injection Moulding Machines",
+    "Plastic Factory India",
+    "Production Facility",
+  ],
+};
 
 // ─── Tokens ───────────────────────────────────────────────────────────────────
 const C = {

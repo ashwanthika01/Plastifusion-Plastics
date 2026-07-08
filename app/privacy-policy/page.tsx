@@ -6,6 +6,14 @@ import {
   Shield, Eye, Database, Lock, Share2, UserCheck,
   RefreshCw, Mail, ChevronRight, FileText, ArrowUpRight,
 } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy",
+
+  description:
+    "Read the Privacy Policy of Plastifusion Plastics regarding collection, usage and protection of user information.",
+};
 
 // ─── Design tokens — exact match to established system ────────────────────────
 const C = {
