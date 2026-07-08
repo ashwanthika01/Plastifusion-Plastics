@@ -1,4 +1,3 @@
-"use client";
 
 import { useRef, useState, type ReactNode } from "react";
 import { motion, useScroll, useTransform, useInView, AnimatePresence } from "framer-motion";

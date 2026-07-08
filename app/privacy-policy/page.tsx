@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState, useRef, useEffect } from "react";
 import { motion, useInView, useScroll, useMotionValueEvent } from "framer-motion";
 import {
@@ -14,7 +12,6 @@ export const metadata: Metadata = {
   description:
     "Read the Privacy Policy of Plastifusion Plastics regarding collection, usage and protection of user information.",
 };
-
 // ─── Design tokens — exact match to established system ────────────────────────
 const C = {
   pageBg:      "#F4F8F5",
