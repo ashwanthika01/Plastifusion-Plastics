@@ -1030,7 +1030,7 @@ function DetailsRail() {
           {details.map((d, i) => (
             <FadeUp key={i} delay={i * 0.1}>
               <TiltCard>
-                <motion.div
+                <motion.a
                   href={d.href}
                   target={d.href.startsWith("http") ? "_blank" : undefined}
                   rel="noopener noreferrer"
