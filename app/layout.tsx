@@ -6,6 +6,7 @@ import { DM_Sans } from "next/font/google";
 import ChatBot from "@/components/chatbot/Chatbot";
 import { Metadata } from "next";
 import Schema from "@/components/Schema";
+import Script from "next/script";
 const dmSans = DM_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -63,11 +64,26 @@ export default function RootLayout({
       <head>
         <Schema />
       </head>
+      <Script
+  src={`https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX`}
+  strategy="afterInteractive"
+/>
+
+<Script id="google-analytics" strategy="afterInteractive">
+  {`
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-NRS24R3X57');
+  `}
+</Script>
       <body>
         <Navbar />
         {children}
         <ChatBot />
         <Footer />
+        
       </body>
     </html>
   );
