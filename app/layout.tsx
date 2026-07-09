@@ -9,7 +9,7 @@ import Schema from "@/components/Schema";
 const dmSans = DM_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.plastifusionplastics.com"),
+  metadataBase: new URL("https://plastifusionplastics.com"),
 
   title: {
     default: "Plastifusion Plastics",

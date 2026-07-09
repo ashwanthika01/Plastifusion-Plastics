@@ -3,8 +3,8 @@ export default function Schema() {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "Plastifusion Plastics",
-    url: "https://www.plastifusionplastics.com",
-    logo: "https://www.plastifusionplastics.com/logo.png",
+    url: "https://plastifusionplastics.com",
+    logo: "https://plastifusionplastics.com/logo.png",
   };
 
   return (
