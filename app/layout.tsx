@@ -15,6 +15,10 @@ export const metadata: Metadata = {
     default: "Plastifusion Plastics",
     template: "%s | Plastifusion Plastics",
   },
+  verification:{
+    google: "DIYEOM7tifq2fQswBcxboSYFipzmEhvaWWpUGS5jBrQ"
+   },
+   
 
   description:
     "Leading manufacturer of precision plastic injection moulded components for industrial and engineering applications.",
@@ -28,7 +32,7 @@ export const metadata: Metadata = {
     "Custom Plastic Components",
     "Plastic Manufacturing India",
   ],
-
+   
   openGraph: {
   title: "Plastifusion Plastics",
 
