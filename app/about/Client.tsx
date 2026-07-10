@@ -403,7 +403,7 @@ function Timeline() {
     { year: "Now", label: "Scaling", desc: "Operating 120T–160T machines with capacity for prototype to mass production across 5 industries." },
   ];
   return (
-    <div className="relative pl-12 md:pl-20">
+    <div className="relative pl-12 md:pl-20 max-w-full overflow-hidden">
       <div className="absolute left-3 md:left-6 top-0 bottom-0 w-px" style={{ background: "rgba(0,176,80,0.2)" }} />
       <div className="space-y-12">
         {milestones.map((m, i) => (
@@ -475,11 +475,11 @@ function IndustryRow({ name, parts, icon, i }: { name: string; parts: string; ic
       style={{ borderColor: "rgba(0,0,0,0.08)" }}
     >
       <div className="w-10 h-10 flex items-center justify-center shrink-0 text-xs font-black" style={{ background: "rgba(0,107,45,0.1)", color: GD, border: `1px solid rgba(0,107,45,0.2)` }}>{icon}</div>
-      <div className="flex-1">
+      <div className="flex-1 min-w-0">
         <p className="text-base font-bold mb-0.5" style={{ color: "#0a0a0a" }}>{name}</p>
         <p className="text-xs" style={{ color: "rgba(0,0,0,0.4)" }}>{parts}</p>
       </div>
-      <svg className="opacity-0 group-hover:opacity-100 transition-opacity duration-200" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 13L13 1M13 1H5M13 1V9" stroke={G} strokeWidth="1.5" /></svg>
+      <svg className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 shrink-0" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 13L13 1M13 1H5M13 1V9" stroke={G} strokeWidth="1.5" /></svg>
     </motion.div>
   );
 }
@@ -507,14 +507,14 @@ export default function AboutPage() {
   ];
 
   return (
-    <main style={{ fontFamily: "'DM Sans', sans-serif", background: D }} className="min-h-screen">
+    <main style={{ fontFamily: "'DM Sans', sans-serif", background: D }} className="min-h-screen w-full overflow-x-hidden">
       <Hero />
       <Ticker />
       <Ticker reverse dark={false} />
       <Manifesto />
 
       {/* Directors Section */}
-      <section style={{ background: D2 }} className="py-32 px-8 md:px-16 lg:px-24">
+      <section style={{ background: D2 }} className="py-32 px-8 md:px-16 lg:px-24 overflow-x-hidden">
         <div className="max-w-7xl mx-auto">
           <FU><Eyebrow label="Leadership" onDark={true} /></FU>
           <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-8 mb-16">
@@ -531,7 +531,7 @@ export default function AboutPage() {
       </section>
 
       {/* Timeline + Why Us */}
-      <section style={{ background: D }} className="py-32 px-8 md:px-16 lg:px-24">
+      <section style={{ background: D }} className="py-32 px-8 md:px-16 lg:px-24 overflow-x-hidden">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
           <div>
             <FU><Eyebrow label="Our Journey" onDark={true} /></FU>
@@ -560,7 +560,7 @@ export default function AboutPage() {
       </section>
 
       {/* Capabilities */}
-      <section style={{ background: D3 }} className="py-32 px-8 md:px-16 lg:px-24">
+      <section style={{ background: D3 }} className="py-32 px-8 md:px-16 lg:px-24 overflow-x-hidden">
         <div className="max-w-7xl mx-auto">
           <FU><Eyebrow label="Capabilities" onDark={true} /></FU>
           <div className="flex flex-col lg:flex-row items-start justify-between gap-12 mb-16">
@@ -579,7 +579,7 @@ export default function AboutPage() {
       </section>
 
       {/* Industries */}
-      <section style={{ background: OFF }} className="py-32 px-8 md:px-16 lg:px-24">
+      <section style={{ background: OFF }} className="py-32 px-8 md:px-16 lg:px-24 overflow-x-hidden">
         <div className="max-w-7xl mx-auto">
           <FU><Eyebrow label="Industries We Serve" /></FU>
           <CR><h2 className="text-[clamp(2.2rem,4.5vw,5rem)] font-black leading-[0.88] tracking-tight uppercase mb-14" style={{ color: "#0a0a0a" }}>Five sectors.<br /><span style={{ WebkitTextStroke: `2px ${GD}`, color: "transparent" }}>Countless parts.</span></h2></CR>

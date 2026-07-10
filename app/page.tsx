@@ -8,7 +8,7 @@ import FAQ from "@/components/home/faq";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Home",
+  title: "Plastifusion Plastics | Precison Plastic Injection Molding",
 
   description:
     "Plastifusion Plastics is a trusted manufacturer of precision plastic injection moulded components serving industrial and engineering sectors with quality and reliability.",

@@ -1,76 +1,79 @@
-// app/api/chat/route.ts
-// This file lives on the SERVER — your API key never reaches the browser.
-
 import { NextRequest, NextResponse } from "next/server";
 
+const SYSTEM_PROMPT = `You are the official chatbot for Plastifusion Plastics Pvt. Ltd., a precision plastic injection moulding manufacturer based in Coimbatore, Tamil Nadu, India.
+
+COMPANY FACTS (use these specifically, do not give generic industry answers):
+- Legal name: Plastifusion Plastics Pvt. Ltd.
+- Location: Vellamadai, Coimbatore, Tamil Nadu, India
+- Mould tolerance: ±0.5mm for most parts.
+- Turn around time: 48 hours for repeat orders, 8-12 weeks for new custom moulds.
+- Experience: over 20 years in precision plastic injection moulding
+- Details: Visit the https://plastifusionplastics.com/ website for more information.
+- Certification: ISO 9001:2015 certified
+- Directors: T. Rajeshwara Kumar and Yokesh R
+- Contact numbers: +91 63817 33925, +91 94437 33121
+- Emails: plastifusion2026@gmail.com, yokesh@plastifusionplastics.com
+- Machines: Yizumi UN160SKIII (160T) and Yizumi UN120SKIII (120T) injection moulding machines
+- Materials worked with: ABS, PP, Nylon, and other engineering plastics
+- Core services: precision injection moulding, prototyping, mass production, custom moulding solutions
+- Ideal customers: businesses needing precision plastic components, prototyping, or bulk moulded parts
+
+RULES:
+1. Always answer using the facts above when relevant — name the specific machines, materials, or certification instead of speaking in generalities.
+2. If someone asks something not covered above (pricing, exact lead times, order minimums, custom specs), say you don't have that detail and direct them to the "Get Quote" / Contact form on the website rather than guessing or giving generic industry filler.
+3. Keep replies short (2-4 sentences), professional, and helpful.
+4. Never invent facts about the company that aren't listed above.`;
+
 export async function POST(req: NextRequest) {
-  // 1. Read the conversation history sent from the chatbot component
-  const body = await req.json();
-
-  // 2. Basic validation — reject empty or malformed requests
-  if (!body?.messages || !Array.isArray(body.messages)) {
-    return NextResponse.json(
-      { error: "Invalid request body" },
-      { status: 400 }
-    );
-  }
-
-  // 3. Optional: rate-limit by IP to protect against abuse
-  // (uncomment if you add an upstash/redis package later)
-  // const ip = req.headers.get("x-forwarded-for") ?? "unknown";
-
   try {
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
+    const { messages } = await req.json();
+
+    if (!Array.isArray(messages)) {
+      return NextResponse.json({ error: "Invalid request: messages must be an array" }, { status: 400 });
+    }
+
+    const apiKey = process.env.OPENROUTER_API_KEY;
+    if (!apiKey) {
+      console.error("OPENROUTER_API_KEY is not set in environment variables");
+      return NextResponse.json({ error: "Server misconfiguration" }, { status: 500 });
+    } 
+    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-api-key": process.env.ANTHROPIC_API_KEY!,
-        "anthropic-version": "2023-06-01",
+        "Authorization": `Bearer ${apiKey}`,
+        "HTTP-Referer": req.headers.get("origin") || "https://plastifusionplastics.com",
+        "X-Title": "Plastifusion Chatbot",
       },
       body: JSON.stringify({
-        model: "claude-haiku-4-5-20251001",
-        max_tokens: 400,
-        system: `You are a helpful assistant for Plastifusion Plastics, a professional injection moulding manufacturer based in Coimbatore, Tamil Nadu, India.
-
-Company facts:
-- Specialises in precision injection moulding
-- Machines: 120T to 160T capacity
-- Materials: ABS, PP, Nylon, Engineering Plastics, custom materials
-- Services: prototyping, mass production, custom moulding
-- Offers factory video tours on request
-- Quote requests handled via the Get Quote form on the website
-- Contact: Based in Coimbatore, Tamil Nadu, India
-
-Guidelines:
-- Be concise, professional, and helpful
-- If asked something outside your knowledge, invite them to use the Get Quote form or request a callback
-- Never make up specs or capabilities — stick to the facts above or say you'll connect them with the team
-- Keep replies short (2-4 sentences max) unless a detailed answer is clearly needed
-- Use plain English, no markdown formatting in replies`,
-        // Only pass messages from the client — not the system prompt
-        messages: body.messages,
+        model: "meta-llama/llama-3.1-8b-instruct",
+        messages: [
+          { role: "system", content: SYSTEM_PROMPT },
+          ...messages,
+        ],
+        max_tokens: 200,
+        temperature: 0.7,
       }),
     });
 
     if (!response.ok) {
-      const err = await response.json().catch(() => ({}));
-      console.error("Anthropic API error:", err);
-      return NextResponse.json(
-        { error: "AI service error" },
-        { status: response.status }
-      );
-    }
+  const errorText = await response.text();
+  console.error("OpenRouter error:", response.status, errorText);
 
+  return NextResponse.json(
+    {
+      status: response.status,
+      error: errorText,
+    },
+    { status: response.status }
+  );
+}
     const data = await response.json();
-    const reply = data.content?.[0]?.text ?? "Sorry, no response received.";
+    const reply = data.choices?.[0]?.message?.content || "Sorry, I couldn't respond.";
 
-    // 4. Return only the reply text — don't forward raw Anthropic response
     return NextResponse.json({ reply });
   } catch (err) {
-    console.error("Proxy route error:", err);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    console.error("Chat API error:", err);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
