@@ -22,5 +22,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: "https://plastifusionplastics.com/contact",
       lastModified: new Date(),
     },
+    {
+      url: "https://plastifusionplastics.com/privacy-policy",
+      lastModified: new Date(),
+    },
+    {
+      url : "https://plastifusionplastics.com/terms",
+      lastModified: new Date(),
+    }
   ];
 }
